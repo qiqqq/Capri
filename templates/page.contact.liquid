@@ -1,0 +1,64 @@
+<div id="account-page">
+	<div class="container validate-forms-inside">
+
+		<div class="headings">
+			<h1 class="h3">{{ page.title }}</h1>		
+			{{ page.content }}	
+		</div>
+
+		{% form 'contact' %}
+
+  			{% if form.posted_successfully? %}
+    			<div class="success">
+      				{{ 'contact.form.post_success' | t }}
+    			</div>
+  			{% endif %}
+
+  			{{ form.errors | default_errors }}
+
+			<div class="field">
+	  			<label for="ContactFormName">{{ 'contact.form.name' | t }}</label>
+				<input type="text"
+				name="contact[name]"
+				id="ContactFormName"
+				autofocus
+				value="{% if form[name] %}{{ form[name] }}{% elsif customer %}{{ customer.name }}{% endif %}">
+			</div>
+
+			<div class="field">
+				<label for="ContactFormEmail">{{ 'contact.form.email' | t }} <span class="asterix">*</span></label>
+				<input type="email"
+				name="contact[email]"
+				id="ContactFormEmail"
+				value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+				spellcheck="false"
+				autocomplete="off"
+				autocapitalize="off"
+				required>
+			</div>
+
+			<div class="field">
+				<label for="ContactFormPhone">{{ 'contact.form.phone' | t }}</label>
+				<input type="tel"
+				name="contact[phone]"
+				id="ContactFormPhone"
+				value="{% if form[phone] %}{{ form[phone] }}{% elsif customer %}{{ customer.phone }}{% endif %}"
+				pattern="[0-9\-]*">
+			</div>
+
+			<div class="field">
+				<label for="ContactFormMessage">{{ 'contact.form.message' | t }} <span class="asterix">*</span></label>
+				<textarea rows="10"
+					name="contact[body]"
+					id="ContactFormMessage"
+					required>{% if form.body %}{{ form.body }}{% endif %}</textarea>
+			</div>
+
+			<div class="field">
+				<input type="submit" class="full margin-top" value="{{ 'contact.form.send' | t }}">
+			</div>
+
+		{% endform %}
+
+	</div>
+</div>

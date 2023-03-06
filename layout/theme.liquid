@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html class="no-js supports-no-cookies" lang="{{ shop.locale }}">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1,initial-scale=1">
+	<meta name="theme-color" content="{{ settings.color_primary }}">
+	<link rel="canonical" href="{{ canonical_url }}">
+
+  	{% if settings.favicon != blank %}
+    	<link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png">
+  	{% endif %}	
+
+  	{% capture seo_title %}
+    	{{ page_title }}
+    	{% if current_tags %}
+      		{%- assign meta_tags = current_tags | join: ', ' %} &ndash; {{ 'general.meta.tags' | t: tags: meta_tags -}}
+    	{% endif %}
+    	{% if current_page != 1 %}
+      		&ndash; {{ 'general.meta.page' | t: page: current_page }}
+    	{% endif %}
+    	{% unless page_title contains shop.name %}
+      		&ndash; {{ shop.name }}
+    	{% endunless %}
+  	{% endcapture %}
+  	<title>{{ seo_title }}</title>
+
+  	{% if page_description %}
+    	<meta name="description" content="{{ page_description | escape }}">
+  	{% endif %}
+
+  	{% include 'social-meta-tags' %}
+
+  	{{ 'https://fonts.googleapis.com/css?family=Montserrat:400,700|Roboto+Slab:300,700' | stylesheet_tag }}
+	{{ 'theme.scss.css' | asset_url | stylesheet_tag }}
+
+  	<script>
+    	document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+
+    	window.theme = {
+      		strings: {
+        		addToCart: {{ 'products.product.add_to_cart' | t | json }},
+        		soldOut: {{ 'products.product.sold_out' | t | json }},
+        		unavailable: {{ 'products.product.unavailable' | t | json }}
+      		},
+      		moneyFormat: {{ shop.money_format | json }},
+      		currency: {{ shop.currency | json }}
+
+    	};
+  	</script>
+
+  	{% if template.directory == 'customers' %}
+    	<!--[if (gt IE 9)|!(IE)]><!--><script src="{{ 'shopify_common.js' | shopify_asset_url }}" defer="defer"></script><!--<![endif]-->
+    	<!--[if lte IE 9]><script src="{{ 'shopify_common.js' | shopify_asset_url }}"></script><![endif]-->
+  	{% endif %}
+
+  	<!--[if (gt IE 9)|!(IE)]><!--><script src="{{ 'vendor.js' | asset_url }}" defer="defer"></script><!--<![endif]-->
+  	<!--[if lt IE 9]><script src="{{ 'vendor.js' | asset_url }}"></script><![endif]-->
+
+  	<!--[if (gt IE 9)|!(IE)]><!--><script src="{{ 'jquery.validate.translations.js' | asset_url }}" defer="defer"></script><!--<![endif]-->
+  	<!--[if lt IE 9]><script src="{{ 'jquery.validate.translations.js' | asset_url }}"></script><![endif]-->
+
+  	{% if settings.show_multiple_currencies %}
+  	  	<!--[if (gt IE 9)|!(IE)]><!--><script src="//cdn.shopify.com/s/javascripts/currencies.js" defer="defer"></script><!--<![endif]-->
+		<!--[if lt IE 9]><script src="//cdn.shopify.com/s/javascripts/currencies.js"></script><![endif]-->
+  		<!--[if (gt IE 9)|!(IE)]><!--><script src="{{ 'jquery.currencies.min.js' | asset_url }}" defer="defer"></script><!--<![endif]-->
+		<!--[if lt IE 9]><script src="{{ 'jquery.currencies.min.js' | asset_url }}"></script><![endif]-->
+  	{% endif %}
+
+  	<!--[if (gt IE 9)|!(IE)]><!--><script src="{{ 'theme.js' | asset_url }}" defer="defer"></script><!--<![endif]-->
+  	<!--[if lt IE 9]><script src="{{ 'theme.js' | asset_url }}"></script><![endif]-->
+
+  	{% if template contains 'collection' %}
+	  	<!--[if (gt IE 9)|!(IE)]><!--><script src="{{ 'jquery.history.js' | asset_url }}" defer="defer"></script><!--<![endif]-->
+	  	<!--[if lt IE 9]><script src="{{ 'jquery.history.js' | asset_url }}"></script><![endif]-->
+	  	<!--[if (gt IE 9)|!(IE)]><!--><script src="{{ 'collection-filters.js' | asset_url }}" defer="defer"></script><!--<![endif]-->
+	  	<!--[if lt IE 9]><script src="{{ 'collection-filters.js' | asset_url }}"></script><![endif]-->
+  	{% endif %}
+
+	{% include 'buddha-megamenu' %}
+  {{ content_for_header }}
+</head>
+<body class="template-{{ template.name | handle }}">
+
+  	{% section 'header' %}
+
+  	<main role="main" id="page">
+    	{{ content_for_layout }}
+    	
+		{% section 'footer' %}
+  	</main>
+	
+	<div id="overlay">
+		<div class="sk-circle">
+		  <div class="sk-circle1 sk-child"></div>
+		  <div class="sk-circle2 sk-child"></div>
+		  <div class="sk-circle3 sk-child"></div>
+		  <div class="sk-circle4 sk-child"></div>
+		  <div class="sk-circle5 sk-child"></div>
+		  <div class="sk-circle6 sk-child"></div>
+		  <div class="sk-circle7 sk-child"></div>
+		  <div class="sk-circle8 sk-child"></div>
+		  <div class="sk-circle9 sk-child"></div>
+		  <div class="sk-circle10 sk-child"></div>
+		  <div class="sk-circle11 sk-child"></div>
+		  <div class="sk-circle12 sk-child"></div>
+		</div>
+	</div>
+
+	{% if settings.show_multiple_currencies %}
+		<div 
+		data-multiple-currencies="enabled"
+		data-currency-format="{{ settings.currency_format | default: 'money_format' }}"
+		data-money-with-currency-format="{{ shop.money_with_currency_format | strip_html }}"
+		data-money-format="{{ shop.money_format | strip_html }}"
+		></div>
+  	{% endif %}
+
+</body>
+</html>

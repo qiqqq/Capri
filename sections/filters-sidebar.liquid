@@ -1,0 +1,163 @@
+{% for block in section.blocks %}  
+<div class="widget filter accordion">
+
+	{% if block.settings.title != blank %}
+	<h5 class="accordion-trigger">
+		<span>{{ block.settings.title }}</span>
+		<i class="icon-arrow-up"></i>
+	</h5>
+	{% endif %}
+
+	{% if block.settings.type == 'list' %}
+		<div class="inner type-list">
+
+			{% if block.settings.filters != blank %}
+
+				{%- assign filters = block.settings.filters | split: ', ' -%}
+
+				<ul>
+
+					{% for filter in filters %}
+						<li><a href="#" data-filter="{{ filter | handleize }}">{{ filter }}</a></li>
+					{% endfor %}
+
+				</ul>
+
+				<div class="clear">
+					<a href="#" data-clear="true">{{ 'collections.filtering.clear_filter' | t }}</a>
+				</div>
+
+			{% endif %}
+
+		</div>
+	{% elsif block.settings.type == 'tags' %}
+		<div class="inner type-tags">
+
+			{% if block.settings.filters != blank %}
+
+				{%- assign filters = block.settings.filters | split: ', ' -%}
+				<div class="tags">
+
+					{% for filter in filters %}
+						<a href="#" class="tag" data-filter="{{ filter | handleize }}">{{ filter }}</a>
+					{% endfor %}
+
+				</div>
+
+				<div class="clear">
+					<a href="#" data-clear="true">{{ 'collections.filtering.clear_filter' | t }}</a>
+				</div>
+			{% endif %}
+
+		</div>
+	{% elsif block.settings.type == 'colors' %}
+		<div class="inner type-colors">
+
+			{% if block.settings.filters != blank %}
+
+				{%- assign filters = block.settings.filters | split: ', ' -%}
+
+				<ul>
+
+					{% for filter in filters %}
+						<li>
+							<a href="#" data-filter="{{ filter | handleize }}">
+								<span class="color-filter" style="background-image: url({{ filter | handleize | append: '.jpg' | asset_img_url: '40x40' }}); background-color: {{ filter | handleize }}"></span><span>{{ filter }}</span>
+							</a>
+						</li>
+					{% endfor %}
+		
+				</ul>
+
+				<div class="clear">
+					<a href="#" data-clear="true">{{ 'collections.filtering.clear_filter' | t }}</a>
+				</div>
+
+			{% endif %}
+
+		</div>
+	{% endif %}
+
+</div>
+{% endfor %}
+
+{% schema %}
+{
+    "name": "Filters sidebar",
+    "blocks": [
+      	{
+        	"type": "widget",
+        	"name": "Widget",
+        	"settings": [
+        	{
+				"type": "text",
+				"id": "title",
+			   	"label": "Title"
+			},
+          	{
+				"type": "select",
+				"id": "type",
+			   	"label": "Filter type",
+			   	"options": [
+			    	{
+			       		"value": "list",
+			       		"label": "List"
+			    	},
+			     	{
+			       		"value": "tags",
+			       		"label": "Tags"
+			     	},
+			     	{
+			       		"value": "colors",
+			       		"label": "Colors"
+			     	}
+			   ],
+			   "info": "Select type of filter block you want to add to sidebar"
+			},
+			{
+				"type": "textarea",
+				"id": "filters",
+			   	"label": "Filters",
+			   	"info": "Enter comma-separated filters"
+			}
+        ]
+      }
+    ],
+    "default": {
+        "blocks": [
+			{
+                "type": "widget",
+                "settings": {
+                    "title": "Price",
+                    "type": "list",
+					"filters": "Jacket, T-Shirts, Pants, Shoes"
+                }
+            },
+			{
+                "type": "widget",
+                "settings": {
+                    "title": "Sizes",
+                    "type": "tags",
+					"filters": "XS, S, M, L, XL"
+                }
+            },
+            {
+                "type": "widget",
+                "settings": {
+                    "title": "Colors",
+                    "type": "colors",
+					"filters": "Black, Red, Green, Gold, Silver, Jeans"
+                }
+            },
+			{
+                "type": "widget",
+                "settings": {
+                    "title": "Price",
+                    "type": "list",
+					"filters": "Under $50, $50-$100, $100-$200, Above $200"
+                }
+            }
+        ]
+    }
+}
+{% endschema %}

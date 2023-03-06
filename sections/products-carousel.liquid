@@ -1,0 +1,77 @@
+<div class="container">
+	<div class="products-carousel">
+
+		{% if section.settings.title != blank or section.settings.subtitle != blank %}
+		<div class="headings">
+
+			{% if section.settings.title != blank %}
+				<h3>{{ section.settings.title | escape }}</h3>
+			{% endif %}
+
+			{% if section.settings.subtitle != blank %}
+				<p>{{ section.settings.subtitle | escape }}</p>
+			{% endif %}
+
+		</div>
+		{% endif %}
+
+		{%- assign collection = collections[section.settings.collection] -%}
+		<div class="products-grid">
+			{% for product in collection.products limit: 8 %}
+				{% include 'product-item' %}
+			{% else %}
+
+				{% for i in (1..8) %}
+					<div class="product-item">
+						<a href="#" class="image">{{ 'default.png' | asset_url | img_tag }}</a>
+						<div class="bottom">
+							<h4><a href="#">{{ 'homepage.onboarding.product_title' | t }}</a></h4>
+							<div class="add-to-cart">
+								<div class="price">
+									{% if settings.currency_format == 'money_format' %}
+										<span class="standard money">{{ 1999 | money }}</span>
+									{% else %}
+										<span class="standard money">{{ 1999 | money_with_currency }}</span>
+									{% endif %}
+								</div>
+								<a href="#" class="btn-primary full">{{ 'products.product.add_to_cart' | t }}</a>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+
+			{% endfor %}
+		</div>
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "Products Carousel",
+	"settings": [
+		{
+			"type": "text",
+			"id": "title",
+			"label": "Heading",
+			"default": "Bestsellers"
+		},
+		{
+			"type": "text",
+			"id": "subtitle",
+			"label": "Subheading",
+			"default": "Check what other people likes"
+		},
+		{
+			"id": "collection",
+			"type": "collection",
+			"label": "Collection"
+		}
+	],
+	"presets": [
+		{
+			"name": "Products Carousel",
+			"category": "Product"
+		}
+	]
+}
+{% endschema %}

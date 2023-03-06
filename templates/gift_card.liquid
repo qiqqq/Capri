@@ -1,0 +1,73 @@
+{% comment %}
+  QR code is rendered in `#QrCode`
+
+  `gift_card.pass_url` is true if apple wallet is enabled for the shop
+{% endcomment %}
+
+{% layout 'gift_card' %}
+
+<div id="gift" class="bg-gray">
+
+	<div class="container">
+		<h1 itemscope itemtype="http://schema.org/Organization">
+			<a href="{{ shop.url }}" itemprop="url" class="site-logo">
+      			{{ shop.name }}
+    		</a>
+		</h1>
+
+		<div class="headings">
+
+			<h3>
+				{{ 'gift_cards.issued.subtext' | t }}
+				{% unless gift_card.enabled %}
+    				<span> &mdash; {{ 'gift_cards.issued.disabled' | t }}</span>
+  				{% endunless %}
+			</h3>
+
+			{%- assign gift_card_expiry_date = gift_card.expires_on | date: "%d/%m/%y" -%}
+
+			{% if gift_card.expired and gift_card.enabled %}
+    			<p>{{ 'gift_cards.issued.expired' | t: expiry: gift_card_expiry_date }}</p>
+  			{% endif %}
+
+  			{% if gift_card.expired != true and gift_card.expires_on and gift_card.enabled %}
+    			<p>{{ 'gift_cards.issued.active' | t: expiry: gift_card_expiry_date }}</p>
+  			{% endif %}
+
+  			{% if gift_card.balance != gift_card.initial_value %}
+    			<p><span class="money">{{ 'gift_cards.issued.remaining_html' | t: balance: gift_card.balance | money }}</span></p>
+  			{% endif %}
+
+  		</div>
+
+		<div class="gift-box">
+
+			<i class="icon-gift">
+				<span class="label main-color"><span class="money">{{ gift_card.initial_value | money_without_trailing_zeros }}</span></span>
+			</i>
+
+			<div class="coupon-outer">
+				<div class="coupon giftcard__code" id="GiftCardDigits">
+					{{ gift_card.code | format_code }}
+				</div>
+			</div>
+		</div>
+
+		<a href="{{ shop.url }}" class="btn-primary wider" target="_blank">{{ 'gift_cards.issued.shop_link' | t }}</a>
+
+		<p>{{ 'gift_cards.issued.redeem' | t }}</p>
+		<div id="QrCode" class="giftcard-qr" data-identifier="{{ gift_card.qr_identifier }}"></div>
+
+		{% if gift_card.pass_url %}
+			<div>
+				<a href="{{ gift_card.pass_url }}" class="apple-wallet">
+		  			{{ 'gift_cards.issued.add_to_apple_wallet' | t }}
+				</a>
+			</div>
+		{% endif %}
+
+		<a href="#" class="print" id="PrintGiftCard">{{ 'gift_cards.issued.print' | t }}</a>
+
+	</div>
+
+</div>

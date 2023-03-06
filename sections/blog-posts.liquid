@@ -1,0 +1,131 @@
+<div class="container">
+
+    {% if section.settings.title != blank or section.settings.subtitle != blank %}
+    <div class="headings">
+
+        {% if section.settings.title != blank %}
+            <h3>{{ section.settings.title | escape }}</h3>
+        {% endif %}
+
+        {% if section.settings.subtitle != blank %}
+            <p>{{ section.settings.subtitle | escape }}</p>
+        {% endif %}
+
+    </div>
+    {% endif %}
+
+    {% assign blog = blogs[section.settings.blog] %}
+    {% if blog != blank %}
+
+        {% if section.settings.display_as == 'carousel' %}
+        <div class="blog-tiles-carousel">
+        {% endif %}
+
+            <div class="blog-tiles-grid">
+                {% for article in blog.articles limit: section.settings.limit %}
+                    <div class="blog-tile">
+                        <div>
+                            <a href="{{ article.url }}" class="img">
+                                {% if article.image %}
+                                    {{ article | img_url: '540x270', crop: 'center' | img_tag: article.title }}
+                                {% endif %}
+                            </a>
+                            <h4>
+                                <a href="{{ article.url }}">{{ article.title }}</a>
+                            </h4>
+                        </div>
+                        <div class="more">
+                            <p>
+                                <a href="{{ article.url }}">{{ 'blogs.article.read_more' | t }}</a>
+                            </p>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="placeholder-noblocks">
+                        {{ 'homepage.onboarding.blog_no_content' | t }}
+                    </div>
+                {% endfor %}
+            </div>
+
+        {% if section.settings.display_as == 'carousel' %}
+        </div>
+        {% endif %}
+
+    {% else %}
+
+        <div class="blog-tiles-grid">
+            {% for i in (1..4) %}
+                <div class="blog-tile">
+                    <div>
+                        <span class="img"></span>
+                        <h4>{{ 'homepage.onboarding.blog_item_title' | t }}</h4>
+                    </div>
+                    <div class="more">
+                        <p>
+                            <span>{{ 'blogs.article.read_more' | t }}</span>
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% schema %}
+{
+	"name": "Blog Posts",
+	"settings": [
+		{
+			"type": "text",
+			"id": "title",
+			"label": "Heading",
+			"default": "Latest News"
+		},
+		{
+			"type": "text",
+			"id": "subtitle",
+			"label": "Subheading",
+			"default": "Read what's going on here"
+		},
+		{
+			"type": "blog",
+			"id": "blog",
+			"label": "Blog",
+			"info": "Select the blog from which you want to display entries"
+		},
+        {
+            "type": "range",
+            "id": "limit",
+            "min": 4,
+            "max": 16,
+            "step": 4,
+            "label": "How many entries to display?",
+            "default": 4
+        },
+        {
+            "type": "select",
+            "id": "display_as",
+            "label": "Display as",
+            "options": [
+                {
+                    "value": "grid",
+                    "label": "Grid"
+                },
+                {
+                    "value": "carousel",
+                    "label": "Carousel"
+                }
+            ],
+            "default": "grid"
+        }
+	],
+	"presets": [
+		{
+			"name": "Blog Posts",
+			"category": "Blog"
+		}
+	]
+}
+{% endschema %}

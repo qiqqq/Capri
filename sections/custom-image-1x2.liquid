@@ -1,0 +1,138 @@
+<div class="container custom-image">
+
+	{% if section.settings.title != blank or section.settings.subtitle != blank %}
+	<div class="headings">
+
+		{% if section.settings.title != blank %}
+  			<h3>{{ section.settings.title | escape }}</h3>
+		{% endif %}
+
+		{% if section.settings.subtitle != blank %}
+			<p>{{ section.settings.subtitle | escape }}</p>
+		{% endif %}
+
+	</div>
+	{% endif %}
+
+	<div class="grid">
+
+		<div class="col-1-2">
+		
+			{% if section.settings.image_1 %}
+
+				{% if section.settings.url_1 != blank %}
+				<a href="{{ section.settings.url_1 }}" class="image-wrapper">
+				{% else %}
+				<span class="image-wrapper">				
+				{% endif %}
+				
+					<img src="{{ section.settings.image_1 | img_url: '1220x' }}" alt="{{ section.settings.image_1.alt | escape }}">
+
+					{% if section.settings.text_1 != blank %}
+					<strong class="h1">{{ section.settings.text_1 }}</strong>
+					{% endif %}
+
+				{% if section.settings.url_1 != blank %}
+				</a>
+				{% else %}
+				</span>
+				{% endif %}
+
+			{% else %}
+
+				{{ 'image' | placeholder_svg_tag: 'placeholder-image' }}
+				
+			{% endif %}
+
+		</div>
+
+		<div class="col-1-2">
+		
+			{% if section.settings.image_2 %}
+
+				{% if section.settings.url_2 != blank %}
+				<a href="{{ section.settings.url_2 }}" class="image-wrapper">
+				{% else %}
+				<span class="image-wrapper">
+				{% endif %}
+				
+					<img src="{{ section.settings.image_2 | img_url: '1220x' }}" alt="{{ section.settings.image_2.alt | escape }}">
+
+					{% if section.settings.text_2 != blank %}
+					<strong class="h1">{{ section.settings.text_2 }}</strong>
+					{% endif %}
+
+				{% if section.settings.url_2 != blank %}
+				</a>
+				{% else %}
+				</span>
+				{% endif %}
+
+			{% else %}
+
+				{{ 'image' | placeholder_svg_tag: 'placeholder-image' }}
+				
+			{% endif %}
+
+		</div>
+
+	</div>
+
+</div>
+
+{% schema %}
+{
+	"name": "Custom Image (1x2)",
+	"class": "custom-image-section",
+	"settings": [
+		{
+			"type": "text",
+			"id": "title",
+			"label": "Heading"
+		},
+		{
+			"type": "text",
+			"id": "subtitle",
+			"label": "Subheading"
+		},
+		{
+			"type": "image_picker",
+			"id": "image_1",
+			"label": "Image 1"
+		},
+		{
+			"type": "url",
+			"id": "url_1",
+			"label": "Image 1 URL",
+			"info": "URL to link to the image"
+		},
+		{
+			"type": "text",
+			"id": "text_1",
+			"label": "Text on the image"
+		},
+		{
+			"type": "image_picker",
+			"id": "image_2",
+			"label": "Image 2"
+		},
+		{
+			"type": "url",
+			"id": "url_2",
+			"label": "Image 2 URL",
+			"info": "URL to link to the image"
+		},
+		{
+			"type": "text",
+			"id": "text_2",
+			"label": "Text on the image"
+		}
+	],
+	"presets": [
+		{
+			"name": "Custom Image (1x2)",
+			"category": "Image"
+		}
+	]
+}
+{% endschema %}

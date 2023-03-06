@@ -1,0 +1,93 @@
+<div class="container">
+	<div class="testimonials">
+
+		{% if section.settings.title != blank or section.settings.subtitle != blank %}
+		<div class="headings">
+
+			{% if section.settings.title != blank %}
+				<h3>{{ section.settings.title | escape }}</h3>
+			{% endif %}
+
+			{% if section.settings.subtitle != blank %}
+				<p>{{ section.settings.subtitle | escape }}</p>
+			{% endif %}
+
+		</div>
+		{% endif %}
+
+		<div class="testimonials-carousel">
+
+			{% for block in section.blocks %}
+			<div class="testimonial">
+				<blockquote>
+					{{ block.settings.quote }}
+					<footer>
+						&mdash; {{ block.settings.author | escape }}
+					</footer>
+				</blockquote>
+			</div>
+			{% endfor %}
+
+			{% if  section.blocks.size == 0 %}
+				{% include 'no-blocks' %}
+			{% endif %}
+
+		</div>
+
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "Testimonials",
+	"max_blocks": 6,
+	"settings": [
+		{
+			"type": "text",
+			"id": "title",
+			"label": "Heading",
+			"default": "Testimonials"
+		},
+		{
+			"type": "text",
+			"id": "subtitle",
+			"label": "Subheading",
+			"default": "What our customers say?"
+		}
+	],
+	"blocks": [
+		{
+			"type": "quote",
+			"name": "Quote",
+			"settings": [
+					{
+						"type": "richtext",
+						"id": "quote",
+						"label": "Text",
+						"default": "<p>Add customer reviews and testimonials to showcase your store’s happy customers.</p>"
+					},
+					{
+						"type": "text",
+						"id": "author",
+						"label": "Author",
+						"default": "Author's name"
+					}
+			]
+		}
+  ],
+	"presets": [
+		{
+			"name": "Testimonials",
+			"category": "Text",
+			"blocks": [
+				{
+					"type": "quote"
+				},
+				{
+					"type": "quote"
+				}
+			]
+		}
+	]
+}
+{% endschema %}

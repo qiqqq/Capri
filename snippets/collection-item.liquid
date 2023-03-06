@@ -1,0 +1,32 @@
+<div class="collection-item">
+	{% if collection == empty %}
+		{%- assign collection_title = 'homepage.onboarding.collection_title' | t -%}
+	{% else %}
+		{%- assign collection_title = collection.title -%}
+	{% endif %}
+
+	<a href="{% if collection == empty %}#{% else %}{{ collection.url }}{% endif %}" 
+		title="{{ 'collections.general.link_title' | t: title: collection_title }}" class="image">
+		{% if collection.image != blank %}
+			{{ collection | img_url: '250x250', crop: 'center' | img_tag: collection.title }}
+		{% elsif collection.products.first != blank %}
+			{{ collection.products.first | img_url: '250x250' | img_tag: collection.title }}
+		{% else %}
+			{{ 'default.png' | asset_url | img_tag }}
+		{% endif %}
+	</a>
+	<div class="bottom">
+		<h4>
+			<a href="{% if collection == empty %}#{% else %}{{ collection.url }}{% endif %}" title="{{ 'collections.general.link_title' | t: title: collection_title }}">{{ collection_title }}</a>
+			<br/>
+
+			{% if collection.all_products_count != blank %}
+				{%- assign number_of_products = collection.all_products_count -%}
+			{% else %}
+				{%- assign number_of_products = 0 -%}
+			{% endif %}
+			<small>{{ 'collections.general.with_count' | t: count: number_of_products }}</small>
+
+		</h4>
+	</div>
+</div>

@@ -1,0 +1,84 @@
+<div class="container custom-image">
+
+	{% if section.settings.title != blank or section.settings.subtitle != blank %}
+	<div class="headings">
+
+		{% if section.settings.title != blank %}
+  			<h3>{{ section.settings.title | escape }}</h3>
+		{% endif %}
+
+		{% if section.settings.subtitle != blank %}
+			<p>{{ section.settings.subtitle | escape }}</p>
+		{% endif %}
+
+	</div>
+	{% endif %}
+
+	{% if section.settings.image %}
+
+		{% if section.settings.url != blank %}
+		<a href="{{ section.settings.url }}"  class="image-wrapper">
+		{% else %}
+		<span class="image-wrapper">				
+		{% endif %}
+		
+       		<img src="{{ section.settings.image | img_url: '2480x' }}" alt="{{ section.settings.image.alt | escape }}">
+
+			{% if section.settings.text != blank %}
+			<strong class="h1">{{ section.settings.text }}</strong>
+			{% endif %}
+		
+		{% if section.settings.url != blank %}
+		</a>
+		{% else %}
+		</span>
+		{% endif %}
+
+	{% else %}
+
+		{{ 'image' | placeholder_svg_tag: 'placeholder-image' }}
+		
+    {% endif %}
+
+</div>
+
+{% schema %}
+{
+	"name": "Custom Image (1x1)",
+	"class": "custom-image-section",
+	"settings": [
+		{
+			"type": "text",
+			"id": "title",
+			"label": "Heading"
+		},
+		{
+			"type": "text",
+			"id": "subtitle",
+			"label": "Subheading"
+		},
+		{
+			"type": "image_picker",
+			"id": "image",
+			"label": "Image"
+		},
+		{
+			"type": "url",
+			"id": "url",
+			"label": "Image URL",
+			"info": "URL to link to the image"
+		},
+		{
+			"type": "text",
+			"id": "text",
+			"label": "Text on the image"
+		}
+	],
+	"presets": [
+		{
+			"name": "Custom Image (1x1)",
+			"category": "Image"
+		}
+	]
+}
+{% endschema %}

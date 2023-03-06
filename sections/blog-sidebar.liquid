@@ -1,0 +1,166 @@
+{% for block in section.blocks %}  
+<div class="widget">
+
+    {% if block.settings.title != blank %}
+        <h5>{{ block.settings.title }}</h5>
+    {% endif %}
+
+    <div class="inner">
+        {% if block.settings.type == 'text' %}
+
+            {{ block.settings.text }}
+
+        {% elsif block.settings.type == 'menu' %}
+            
+            {% if block.settings.menu %}
+            <ul>
+                {% for link in linklists[block.settings.menu].links %}
+                    <li><a href="{{ link.url }}" title="{{ link.title }}">{{ link.title }}</a></li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+        {% elsif block.settings.type == 'image' %}
+            
+            {% if block.settings.image %}
+                <img src="{{ block.settings.image | img_url: 'master' }}" alt="{{ block.settings.image.alt | escape }}">
+            {% endif %}
+
+        {% elsif block.settings.type == 'text_plus_image' %}
+
+            {{ block.settings.text }}
+            
+            {% if block.settings.image %}
+                <img src="{{ block.settings.image | img_url: 'master' }}" alt="{{ block.settings.image.alt | escape }}">
+            {% endif %}
+
+        {% elsif block.settings.type == 'categories' %}
+
+            {% if blog.all_tags.size > 0 %}
+            <ul>
+                {% for tag in blog.all_tags %}
+
+                    {% if current_tags contains tag %}
+                      <li class="active">{{ tag | link_to_tag: tag }}</li>
+                    {% else %}
+                      <li>{{ tag | link_to_tag: tag }}</li>
+                    {% endif %}
+
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+        {% elsif block.settings.type == 'newsletter' %}
+
+            {% include 'mailchimp-newsletter' %}
+
+        {% elsif block.settings.type == 'html' %}
+
+            <div class="custom-html">
+                {{ block.settings.html }}
+            </div>
+
+        {% endif %}
+    </div>
+
+</div>
+{% endfor %}
+
+{% schema %}
+{
+    "name": "Blog sidebar",
+    "blocks": [
+        {
+            "type": "widget",
+            "name": "Widget",
+            "settings": [
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Title"
+            },
+            {
+                "type": "select",
+                "id": "type",
+                "label": "Widget type",
+                "options": [
+                    {
+                        "value": "text",
+                        "label": "Text"
+                    },
+                    {
+                        "value": "image",
+                        "label": "Image"
+                    },
+                    {
+                        "value": "text_plus_image",
+                        "label": "Text + image"
+                    },
+                    {
+                        "value": "menu",
+                        "label": "Menu"
+                    },
+                    {
+                        "value": "categories",
+                        "label": "Blog Categories"
+                    },
+                    {
+                        "value": "newsletter",
+                        "label": "MailChimp Newsletter"
+                    },
+                    {
+                        "value": "html",
+                        "label": "Custom HTML Code"
+                    }
+               ],
+               "info": "Select type of widget block you want to add to footer"
+            },
+            {
+                "type": "richtext",
+                "id": "text",
+                "label": "Text"
+            },
+            {
+                "type": "link_list",
+                "id": "menu",
+                "label": "Menu"
+            },
+            {
+                "type": "image_picker",
+                "id": "image",
+                "label": "Image" 
+            },
+            {
+                "type": "html",
+                "id": "html",
+                "label": "Custom HTML Code" 
+            },
+            {
+                "type": "text",
+                "id": "mailchimp_form_url",
+                "label": "MailChimp Form URL" 
+            }
+        ]
+      }
+    ],
+    "default": {
+        "blocks": [
+            {
+                "type": "widget",
+                "settings": {
+                    "title": "Categories",
+                    "type": "categories"
+                }
+            },
+            {
+                "type": "widget",
+                "settings": {
+                    "title": "About our blog",
+                    "type": "text",
+                    "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sit amet suscipit ligula. Praesent sed dolor at augue aliquet euismod. Vestibulum tincidunt finibus diam, auctor sollicitudin est. Curabitur at eros in ligula sodales feugiat quis vitae diam.</p>"
+                }
+            }
+        ]
+    }
+}
+{% endschema %}

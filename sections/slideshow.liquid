@@ -1,0 +1,229 @@
+{% if section.settings.show_slideshow %}
+<div id="slideshow"
+	data-animation-type="{{ section.settings.slideshow_animation_type }}"
+	data-autoplay="{{ section.settings.slideshow_enable_autoplay }}" 
+	data-autoplay-speed="{{ section.settings.slideshow_autoplay_speed }}" 
+	data-show-arrows="{{ section.settings.slideshow_show_arrows }}" 
+	data-show-dots="{{ section.settings.slideshow_show_dots }}">
+
+	{% for block in section.blocks %}  
+
+		{% if block.settings.image %}
+			<div class="slide" style="background-image: url('{{ block.settings.image | img_url: 'master' }}')">
+		{% else %}
+			<div class="slide">
+		{% endif %}
+			<div class="container">
+				<div class="animated-inner {{ block.settings.text_position }} {{ block.settings.text_color }}">
+
+					{% if block.settings.headline %}
+						<h2 class="h1">{{ block.settings.headline }}</h2>
+					{% endif %}
+
+					{% if block.settings.headline %}
+						{{ block.settings.text }}
+					{% endif %}
+
+					{% if block.settings.cta_text and block.settings.cta_url %}
+						<a href="{{ block.settings.cta_url }}" class="{{ block.settings.cta_btn_type }} wider">{{ block.settings.cta_text }}</a>
+					{% endif %}
+
+				</div>
+			</div>
+		</div>
+
+	{% else %}
+		<div class="slide"><div class="container"></div></div>
+	{% endfor %}
+
+</div>
+{% endif %}
+
+{% schema %}
+{
+	"name": "Slideshow",
+	"settings": [
+		{
+			"type": "checkbox",
+			"id": "show_slideshow",
+			"label": "Show Slideshow?",
+			"default": false
+		},
+		{
+			"type": "select",
+			"id": "slideshow_animation_type",
+		   	"label": "Animation type",
+		   	"options": [
+		    	{
+		       		"value": "fade",
+		       		"label": "Fade"
+		    	},
+		     	{
+		       		"value": "slide",
+		       		"label": "Slide"
+		     	}
+		   ]
+		},
+		{
+			"type": "checkbox",
+			"id": "slideshow_enable_autoplay",
+		   	"label": "Enable autoplay?",
+		   	"default": true
+		},
+		{
+			"type": "select",
+			"id": "slideshow_autoplay_speed",
+		   	"label": "Autoplay speed",
+		   	"options": [
+		    	{
+		       		"value": "1000",
+		       		"label": "1 second"
+		    	},
+				{
+		       		"value": "2000",
+		       		"label": "2 seconds"
+		    	},
+				{
+		       		"value": "3000",
+		       		"label": "3 seconds"
+		    	},
+				{
+		       		"value": "4000",
+		       		"label": "4 seconds"
+		    	},
+				{
+		       		"value": "5000",
+		       		"label": "5 seconds"
+		    	},
+				{
+		       		"value": "6000",
+		       		"label": "6 seconds"
+		    	},
+				{
+		       		"value": "7000",
+		       		"label": "7 seconds"
+		    	},
+				{
+		       		"value": "8000",
+		       		"label": "8 seconds"
+		    	},
+				{
+		       		"value": "9000",
+		       		"label": "9 seconds"
+		    	},
+				{
+		       		"value": "10000",
+		       		"label": "10 seconds"
+		    	}
+		   	],
+		   	"default": "4000"
+		},
+		{
+			"type": "checkbox",
+			"id": "slideshow_show_arrows",
+		   	"label": "Show arrows?",
+		   	"default": false
+		},
+		{
+			"type": "checkbox",
+			"id": "slideshow_show_dots",
+		   	"label": "Show dots?",
+		   	"default": true
+		}
+	],
+	"blocks": [
+      	{
+        	"type": "slide",
+        	"name": "Slide",
+        	"settings": [
+	        	{
+					"type": "image_picker",
+					"id": "image",
+				   	"label": "Image" 
+				},
+	          	{
+					"type": "select",
+					"id": "text_position",
+				   	"label": "Text position",
+				   	"options": [
+				    	{
+				       		"value": "left",
+				       		"label": "Left"
+				    	},
+				     	{
+				       		"value": "center",
+				       		"label": "Center"
+				     	},
+				     	{
+				       		"value": "right",
+				       		"label": "Right"
+				     	}
+				   ]
+				},
+				{
+					"type": "text",
+					"id": "headline",
+				   	"label": "Headline"
+				},
+				{
+					"type": "richtext",
+					"id": "text",
+				   	"label": "Text"
+				},
+	          	{
+					"type": "select",
+					"id": "text_color",
+				   	"label": "Text color",
+				   	"options": [
+				    	{
+				       		"value": "white",
+				       		"label": "White"
+				    	},
+				     	{
+				       		"value": "black",
+				       		"label": "Black"
+				     	}
+				   ],
+				   "default": "white"
+				},
+				{
+					"type": "text",
+					"id": "cta_text",
+				   	"label": "CTA button text",
+				   	"info": "Button will not show if this field will be empty"
+				},
+				{
+					"type": "url",
+					"id": "cta_url",
+				   	"label": "CTA button URL",
+				   	"info": "Button will not show if this field will be empty"
+				},
+				{
+					"type": "select",
+					"id": "cta_btn_type",
+				   	"label": "CTA button type",
+				   	"options": [
+				    	{
+				       		"value": "btn-primary",
+				       		"label": "Button primary"
+				    	},
+				     	{
+				       		"value": "btn-secondary",
+				       		"label": "Button secondary"
+				     	},
+						{
+				       		"value": "btn-primary-negative",
+				       		"label": "Button primary (negative)"
+				     	},
+						{
+				       		"value": "btn-secondary-negative",
+				       		"label": "Button secondary (negative)"
+				     	}
+				   ],
+				   "default": "btn-primary"
+				}
+	        ]
+      	}
+    ]
+}
+{% endschema %}

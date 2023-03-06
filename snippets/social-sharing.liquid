@@ -1,0 +1,32 @@
+<!-- /snippets/social-sharing.liquid -->
+<div id="share-buttons">
+
+  	{% if settings.share_facebook %}
+    	<a target="_blank" class="facebook" href="//www.facebook.com/sharer.php?u={{ shop.url | append: share_permalink }}">
+      		<i class="icon-facebook"></i>
+      		<span>{{ 'general.social.share_on_facebook' | t }}</span>
+    	</a>
+  	{% endif %}
+
+  	{% if settings.share_twitter %}
+    	<a target="_blank" class="twitter" href="//twitter.com/share?text={{ share_title | url_param_escape }}&amp;url={{ shop.url | append: share_permalink }}">
+      		<i class="icon-twitter"></i>
+      		<span>{{ 'general.social.share_on_twitter' | t }}</span>
+    	</a>
+  	{% endif %}
+
+  	{% if settings.share_pinterest %}
+    	<a target="_blank" class="pinterest" href="//pinterest.com/pin/create/button/?url={{ shop.url | append: share_permalink }}&amp;media={{ share_image | img_url: '1024x1024' }}&amp;description={{ share_title | url_param_escape }}">
+      		<i class="icon-pinterest"></i>
+      		<span>{{ 'general.social.share_on_pinterest' | t }}</span>
+    	</a>
+  	{% endif %}
+
+  	{% if settings.share_google_plus %}
+    	<a target="_blank" class="google-plus" href="//plus.google.com/share?url={{ shop.url | append: share_permalink }}">
+      		<i class="icon-googleplus"></i>
+      		<span>{{ 'general.social.share_on_google_plus' | t }}</span>
+    	</a>
+  	{% endif %}
+
+</div>

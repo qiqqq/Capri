@@ -1,0 +1,83 @@
+{% paginate blog.articles by 5 %}
+
+  	{%- assign blog_title = blog.title -%}
+
+  	{% if current_tags %}
+    	{% capture blog_title %}{{ blog.title | link_to: blog.url }} &mdash; {{ current_tags.first }}{% endcapture %}
+  	{% endif %}
+
+	{% if settings.blog_hero_image != blank %}
+	<section id="hero" style="background-image: url('{{ settings.blog_hero_image | img_url: '2000x500', crop: 'center' }}');">
+	{% else %}
+	<section id="hero">
+	{% endif %}
+		<div class="container">
+			<h1>{{ blog_title }}</h1>
+		</div>
+	</section>
+
+	<div id="two-columns">
+		<div class="container">
+			<div id="content">
+				<div id="blog">
+					{% for article in blog.articles %}
+						<div class="blog-item">
+
+							<h3 class="title"><a href="{{ article.url }}">{{ article.title }}</a></h3>
+
+							<div class="data">
+								<div class="nowrap">{{ article.published_at | time_tag: format: 'month_day_year' }}</div>
+								<div class="separator">/</div>
+								<div class="nowrap">{{ article.author }}</div>
+								{% if blog.comments_enabled? %}
+								<div class="separator">/</div>
+								<div class="nowrap">
+							        <a href="{{ article.url }}#comments" class="nowrap comments">
+							            {{ 'blogs.comments.with_count' | t: count: article.comments_count }}
+							        </a>
+						   		</div>
+						        {% endif %}
+								{% if article.tags.size > 0 %}
+									<div class="separator">/</div>
+									<div>
+										<div class="tags">
+						          		{% for tag in article.tags %}
+						              		<a href="{{ blog.url }}/tagged/{{ tag | handle }}" class="tag">{{ tag }}</a>
+						         		{% endfor %}
+						         		</div>
+						         	</div>
+						        {% endif %}
+							</div>
+
+							{% if article.image %}
+      							<a href="{{ article.url }}">
+        							{{ article | img_url: '1600x400', crop: 'center' | img_tag: article.title }}
+      							</a>
+    						{% endif %}
+
+							<div class="excerpt">
+								{% if article.excerpt.size > 0 %}
+        							{{ article.excerpt }}
+      							{% else %}
+        							<p>
+          								{{ article.content | strip_html | truncatewords: 100 }}
+        							</p>
+      							{% endif %}
+								<p><a href="{{ article.url }}">{{ 'blogs.article.read_more' | t }}</a></p>
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+
+				{% if paginate.pages > 1 %}
+    				{% include 'pagination' %}
+  				{% endif %}
+
+			</div>
+            <aside id="sidebar">
+                {% section 'blog-sidebar' %}
+            </aside>
+		</div>
+	</div>
+
+{% endpaginate %}

@@ -1,0 +1,155 @@
+{% if article.image %}
+	<section id="hero" style="background-image: url('{{ article | img_url: '2000x500', crop: 'center' }}');">
+{% else %}
+	<section id="hero">
+{% endif %}
+</section>
+
+<div id="two-columns">
+	<div class="container">
+		<article id="content" class="blog-item" role="article" itemscope itemtype="http://schema.org/Article">
+
+			<h1 class="title h3">{{ article.title }}</h1>
+
+			<div class="data">
+				<div class="nowrap">{{ article.published_at | time_tag: format: 'month_day_year' }}</div>
+				<div class="separator">/</div>
+				<div class="nowrap">{{ article.author }}</div>
+				{% if blog.comments_enabled? %}
+				<div class="separator">/</div>
+		        <div class="nowrap">
+		        	<a href="{{ article.url }}#comments" class="nowrap comments">
+			            {{ 'blogs.comments.with_count' | t: count: article.comments_count }}
+			        </a>
+		        </div>
+		        {% endif %}
+				{% if article.tags.size > 0 %}
+					<div class="separator">/</div>
+					<div>
+						<div class="tags">
+		          		{% for tag in article.tags %}
+		              		<a href="{{ blog.url }}/tagged/{{ tag | handle }}" class="tag">{{ tag }}</a>
+		         		{% endfor %}
+		         		</div>
+		         	</div>
+		        {% endif %}
+			</div>
+
+			<div class="wysiwyg-content">
+				{{ article.content }}
+			</div>
+
+			{% if settings.social_sharing_blog %}
+    			{% include 'social-sharing', share_title: article.title, share_permalink: article.url, share_image: article.image %}
+  			{% endif %}
+
+			{% if blog.comments_enabled? %}
+			<div id="comments">
+
+				{% comment %}
+				  When a comment is submitted, the browser is redirected to a page that includes 
+				  the new comment id in its URL.
+				  #comments is a required ID and is used as an anchor link by Shopify.
+				{% endcomment %}
+
+				{%- assign number_of_comments = article.comments_count -%}
+
+				{% comment %}
+				  If a comment was just submitted but requires moderation, we have an extra comment to count.
+				{% endcomment %}
+				{% if comment and comment.status != 'published' %}
+				  {%- assign number_of_comments = article.comments_count | plus: 1 -%}
+				{% endif %}
+
+				<h3>{{ 'blogs.comments.with_count' | t: count: number_of_comments }}</h3>
+
+				{% paginate article.comments by 5 %}
+
+					{% if comment and comment.status and paginate.current_page == 1 %}
+			        	<p class="success">
+			          		{% if blog.moderated? and comment.status != 'published' %}
+			            		{{ 'blogs.comments.success_moderated' | t }}
+			          		{% else %}
+			            		{{ 'blogs.comments.success' | t }}
+			          		{% endif %}
+			        	</p>
+			      	{% endif %}
+
+					{% if number_of_comments > 0 %}
+
+						{% if comment and comment.status != 'published' %}
+							<div class="comment" id="{{ comment.id }}">
+								{% capture date %}{{ comment.created_at | time_tag: format: 'month_day_year' }}{% endcapture %}
+								<h5>{{ 'blogs.article.comment_meta_html' | t: author: comment.author, date: date }}</h5>
+								<p>
+									{{ comment.content }}
+								</p>
+							</div>
+          				{% endif %}
+
+          				{% for comment in article.comments %}
+							<div class="comment" id="{{ comment.id }}">
+								{% capture date %}{{ comment.created_at | time_tag: format: 'month_day_year' }}{% endcapture %}
+								<h5>{{ 'blogs.article.comment_meta_html' | t: author: comment.author, date: date }}</h5>
+								<p>
+									{{ comment.content }}
+								</p>
+							</div>
+          				{% endfor %}
+
+				        {% if paginate.pages > 1 %}
+				        	{% include 'pagination' %}
+				        {% endif %}
+
+				    {% endif %}
+
+				{% endpaginate %}
+
+	            <div id="write-comment" class="validate-forms-inside">
+	            	<h3>{{ 'blogs.comments.title' | t }}</h3>
+	            	{% form 'new_comment', article %}
+	            		<input type="hidden" value="new_comment" name="form_type">
+	            		<input type="hidden" name="utf8" value="✓">
+
+						{{ form.errors | default_errors }}
+
+	               		<div class="field">
+      						<input type="text"
+					             name="comment[author]"
+					             id="CommentAuthor"
+					             placeholder="{{ 'blogs.comments.name' | t }} *"
+					             value="{{ form.author }}"
+					             autocapitalize="words"
+					             required>
+               			</div>
+               			<div class="field">
+      						<input type="email"
+					             name="comment[email]"
+					             id="CommentEmail"
+					             placeholder="{{ 'blogs.comments.email' | t }} *"
+					             value="{{ form.email }}"
+					             spellcheck="false"
+					             autocomplete="off"
+					             autocapitalize="off"
+					             required>
+               			</div>
+               			<div class="field">
+					      	<textarea name="comment[body]" id="CommentBody" placeholder="{{ 'blogs.comments.message' | t }} *" required>{{ form.body }}</textarea>
+               			</div>
+               			{% if blog.moderated? %}
+        					<p>{{ 'blogs.comments.moderated' | t }}</p>
+      					{% endif %}
+               			<div class="field">
+               				<input type="submit" class="btn" value="{{ 'blogs.comments.post' | t }}">
+               			</div>
+	              {% endform %}
+	            </div>
+          	</div>
+          	{% endif %}
+
+		</article>
+        <aside id="sidebar">
+            {% section 'blog-sidebar' %}
+        </aside>
+	</div>
+</div>

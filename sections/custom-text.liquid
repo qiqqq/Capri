@@ -1,0 +1,53 @@
+<div class="container">
+
+	{% if section.settings.title != blank or section.settings.subtitle != blank %}
+	<div class="headings">
+
+		{% if section.settings.title != blank %}
+  			<h3>{{ section.settings.title | escape }}</h3>
+		{% endif %}
+
+		{% if section.settings.subtitle != blank %}
+			<p>{{ section.settings.subtitle | escape }}</p>
+		{% endif %}
+
+	</div>
+	{% endif %}
+
+	<div class="wysiwyg-content">
+		{{ section.settings.text }}
+	</div>
+
+</div>
+
+{% schema %}
+{
+	"name": "Custom Text",
+	"settings": [
+		{
+			"type": "text",
+			"id": "title",
+			"label": "Heading",
+			"default": "Custom Text"
+		},
+		{
+			"type": "text",
+			"id": "subtitle",
+			"label": "Subheading",
+			"default": "Donec ut augue iaculis"
+		},
+		{
+			"type": "richtext",
+			"id": "text",
+			"label": "Content",
+			"default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut augue iaculis, eleifend augue eget, accumsan lacus. Integer egestas dapibus erat, sit amet tempus ligula convallis id. Integer eu tortor molestie, venenatis risus ut, congue neque. Quisque non eros quis dolor lacinia congue nec ac lacus. Pellentesque ullamcorper venenatis metus, in semper ligula porttitor non.</p><p>Nullam a augue a neque egestas egestas. Nunc id imperdiet risus. Nunc massa ex, elementum a nisi in, laoreet dictum sapien. Cras eu placerat urna. Ut id orci porta, tempor lorem mattis, rhoncus arcu. Praesent ac vulputate sem. Sed at mattis velit. Aenean non diam accumsan, facilisis dolor sed, pulvinar odio. Ut maximus, turpis a rhoncus pulvinar, massa nisi luctus velit, non pretium neque quam eu orci. Suspendisse justo elit, mattis ac metus quis, fringilla pharetra velit.</p>"
+		}
+	],
+	"presets": [
+		{
+			"name": "Custom Text",
+			"category": "Text"
+		}
+	]
+}
+{% endschema %}

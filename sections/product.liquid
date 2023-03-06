@@ -1,0 +1,267 @@
+<div id="product" itemscope itemtype="http://schema.org/Product">
+
+	{%- assign current_variant = product.selected_or_first_available_variant -%}
+	{%- assign featured_image = current_variant.featured_image | default: product.featured_image -%}
+
+	<meta itemprop="name" content="{{ product.title }}{% unless product.has_only_default_variant %} - {{ current_variant.title }}{% endunless %}">
+	<meta itemprop="url" content="{{ shop.url }}{{ current_variant.url }}">
+	<meta itemprop="brand" content="{{ product.vendor }}">
+	<meta itemprop="image" content="{{ featured_image | img_url: '600x600' }}">
+	<meta itemprop="description" content="{{ product.description | strip_html | escape }}">
+
+	<div class="top bg-gray">
+
+		<div class="container">
+			<div id="breadcrumbs">
+
+				<a href="/" title="{{ 'products.product.home' | t }}">{{ 'products.product.home' | t }}</a>
+				<i class="icon-arrow-right"></i>
+
+				{% if collection.url %}
+      				{{ collection.title | link_to: collection.url }}
+    			{% endif %}
+
+			</div>
+		</div>
+
+		<div class="container row">
+			<div class="col info">
+
+				{%- assign current_variant = product.selected_or_first_available_variant -%}
+				{% if current_variant.sku != blank %}
+					<h6>{{ 'products.product.sku' | t }}: {{ current_variant.sku }}</h6>
+				{% endif %}
+
+				<h1>{{ product.title }}</h1>
+
+				{% if product.vendor %}
+					<h6>{{ product.vendor | capitalize }}</h6>
+				{% endif %}
+
+				{% if settings.show_product_reviews %}
+					<span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+				{% endif %}
+
+			</div>
+
+			{% if product.images.size >= 0  %}
+			<div class="col images">
+				<div class="main-image">
+
+					{% for image in product.images %}
+						<img src="{{ image.src | img_url: '350x350' }}" alt="{{ image.alt | escape }}">
+					{% else %}
+						{{ 'default.png' | asset_img_url: '350x350' | img_tag: product.title }}
+					{% endfor %}
+
+				</div>
+
+				<div class="carousel">
+					{% for image in product.images %}
+						<div>
+							<img src="{{ image.src | img_url: '80x80' }}" alt="{{ image.alt | escape }}">
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+			{% endif %}
+
+			<div class="col add-to-cart" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+				<meta itemprop="priceCurrency" content="{{ shop.currency }}">
+    			<meta itemprop="price" content="{{ current_variant.price | divided_by: 100.00 }}">
+    			<link itemprop="availability" href="http://schema.org/{% if current_variant.available %}InStock{% else %}OutOfStock{% endif %}">
+
+				<div class="price">
+
+					{% if product.has_only_default_variant %}
+
+						{% if product.compare_at_price > product.price %}
+							{% if settings.currency_format == 'money_format' %}
+								<span class="standard money">{{ product.price | money }}</span>
+								<span class="old money">{{ product.compare_at_price | money }}</span>
+							{% else %}
+								<span class="standard money">{{ product.price | money_with_currency }}</span>
+								<span class="old money">{{ product.compare_at_price | money_with_currency }}</span>
+							{% endif %}
+						{% else %}
+							{% if settings.currency_format == 'money_format' %}
+								<span class="standard money">{{ product.price | money }}</span>
+							{% else %}
+								<span class="standard money">{{ product.price | money_with_currency }}</span>
+							{% endif %}
+						{% endif %}
+
+					{% else %}
+
+						{% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}
+							{% if settings.currency_format == 'money_format' %}
+								<span class="standard">
+									<span class="money">{{ product.selected_or_first_available_variant.price | money }}</span>
+								</span>
+								<span class="old">
+									<span class="money">{{ product.selected_or_first_available_variant.compare_at_price | money }}</span>
+								</span>
+							{% else %}
+								<span class="standard">
+									<span class="money">{{ product.selected_or_first_available_variant.price | money_with_currency }}</span>
+								</span>
+								<span class="old">
+									<span class="money">{{ product.selected_or_first_available_variant.compare_at_price | money_with_currency }}</span>
+								</span>
+							{% endif %}							
+						{% else %}
+							{% if settings.currency_format == 'money_format' %}
+								<span class="standard">
+									<span class="money">{{ product.selected_or_first_available_variant.price | money }}</span>
+								</span>
+							{% else %}
+								<span class="standard">
+									<span class="money">{{ product.selected_or_first_available_variant.price | money_with_currency }}</span>
+								</span>
+							{% endif %}			
+							<span class="old"></span>				
+						{% endif %}
+
+					{% endif %}
+
+				</div>
+
+				<form action="/cart/add" method="post" enctype="multipart/form-data">
+
+					{% unless product.has_only_default_variant %}
+        				{% for option in product.options_with_values %}
+        					<div class="js single-option">
+
+        						{% if section.settings.labels_of_variants_above %}
+        							<label for="SingleOptionSelector-{{ forloop.index0 }}">{{ option.name }}:</label>
+        						{% endif %}
+
+	        					<select
+	              					id="SingleOptionSelector-{{ forloop.index0 }}"
+	              					data-single-option-selector
+	              					data-index="option{{ option.position }}"
+	              					{% if section.settings.labels_of_variants_above == blank %}
+									data-label-prefix="{{ option.name }}"
+									{% endif %}>
+
+		              				{% for value in option.values %}
+		                				<option
+		                  					value="{{ value | escape }}"
+		                  					{% if option.selected_value == value %}selected="selected"{% endif %}>
+		                    					{{ value }}
+		                				</option>
+		              				{% endfor %}
+
+	            				</select>
+        					</div>
+        				{% endfor %}
+      				{% endunless %}
+
+      				<div class="no-js single-option">
+      					<label for="SingleOptionSelector">{{ 'products.product.select_variant' | t }}:</label>
+      					<select name="id" id="SingleOptionSelector" class="raw" data-product-select>
+	        				{% for variant in product.variants %}
+				          		<option
+				            		{% if variant == current_variant %}selected="selected"{% endif %}
+				            		{% unless variant.available %}disabled="disabled"{% endunless %}
+				            		value="{{ variant.id }}">
+				            		{% if settings.currency_format == 'money_format' %}
+				              			{{ variant.title }} - {{ variant.price | money }}
+				              		{% else %}
+										{{ variant.title }} - {{ variant.price | money_with_currency }}
+				              		{% endif %}
+				          		</option>
+	        				{% endfor %}
+	      				</select>
+      				</div>
+
+					<div class="qty-btn-group">
+						<input type="number" name="quantity" min="1" max="99" value="1" />
+						<button 
+						type="submit" 
+						name="add"
+						id="add-to-cart-btn"
+						data-unavailable="{{ 'products.product.sold_out' | t }}"
+						data-available="{{ 'products.product.add_to_cart' | t }}"
+        					{% unless current_variant.available %}disabled="disabled"{% endunless %}>
+					            {% if current_variant.available %}
+					              {{ 'products.product.add_to_cart' | t }}
+					            {% else %}
+					              {{ 'products.product.sold_out' | t }}
+					            {% endif %}
+     					</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="bottom">
+		<div id="tabs">
+			<div class="bg-gray">
+				<div class="container">
+					<ul class="menu">
+						<li><a href="#description" class="active">{{ 'products.product.description' | t }}</a></li>
+
+						{% if settings.show_product_reviews %}
+							<li><a href="#reviews">{{ 'products.product.reviews' | t }}</a></li>
+						{% endif %}
+
+						<!-- <li><a href="#other">Other</a></li> -->
+					</ul>
+				</div>
+			</div>
+			<div class="container">
+				<div id="description" class="tab-content active">
+					<div id="wysiwyg-content">
+						{{ product.description }}
+
+						{% if section.settings.show_share_buttons %}
+		    				{% include 'social-sharing', share_title: product.title, share_permalink: product.url, share_image: product %}
+		  				{% endif %}
+					</div>
+				</div>
+
+				{% if settings.show_product_reviews %}
+					<div id="reviews" class="tab-content">
+						<div id="shopify-product-reviews" data-id="{{product.id}}">
+							<div class="admin-message">
+								{{ 'admin_messages.messages.reviews_html' | t }}
+							</div>
+							{{ product.metafields.spr.reviews }}
+						</div>
+					</div>
+				{% endif %}
+
+				<!-- <div id="other" class="tab-content"></div> -->
+			</div>
+		</div>
+	</div>
+
+  	{% unless product == empty %}
+    	<script type="application/json" data-product-json>
+      		{{ product | json }}
+    	</script>
+  	{% endunless %}
+
+</div>
+
+{% schema %}
+{
+	"name": "Product",
+	"settings": [
+		{
+			"type": "checkbox",
+			"id": "show_share_buttons",
+			"label": "Show social sharing buttons",
+			"default": true
+		},
+		{
+			"type": "checkbox",
+			"id": "labels_of_variants_above",
+			"label": "Labels of variants above select field",
+			"info": "Labels will be visible above select fields with variants options",
+			"default": false
+		}
+	]
+}
+{% endschema %}

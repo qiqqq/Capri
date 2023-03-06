@@ -1,0 +1,101 @@
+<div class="product-item">
+
+	<a href="{{ product.url | within: collection }}" class="image">
+		{% if product.featured_image != blank %}
+			{{ product.featured_image.src | img_url: '250x250' | img_tag: product.featured_image.alt }}
+		{% else %}
+			{{ 'default.png' | asset_url | img_tag }}
+		{% endif %}
+	</a>
+
+	<div class="bottom">
+		<h4>
+			<a href="{{ product.url | within: collection }}" title="{{ product.title | escape }}">
+				{{ product.title }}
+			</a>
+		</h4>
+		
+		<div class="add-to-cart">
+			<div class="price">
+
+				{% if product.compare_at_price > product.price %}
+
+					{% if product.price_varies %}
+						{% if settings.currency_format == 'money_format' %}
+							{%- assign regular_price = product.compare_at_price_min | money -%}
+							{%- assign sale_price = product.price_min | money -%}
+						{% else %}
+							{%- assign regular_price = product.compare_at_price_min | money_with_currency -%}
+							{%- assign sale_price = product.price_min | money_with_currency -%}
+						{% endif %}
+						<span class="standard money">{{ 'products.product.from_text_html' | t: price: sale_price }}</span>
+						<span class="old money">{{ 'products.product.from_text_html' | t: price: regular_price }}</span>
+					{% else %}
+						{% if settings.currency_format == 'money_format' %}
+							<span class="standard money">{{ product.price | money }}</span>
+							<span class="old money">{{ product.compare_at_price | money }}</span>
+						{% else %}
+							<span class="standard money">{{ product.price | money_with_currency }}</span>
+							<span class="old money">{{ product.compare_at_price | money_with_currency }}</span>
+						{% endif %}
+					{% endif %}
+
+				{% else %}
+
+					{% if product.price_varies %}
+						{% if settings.currency_format == 'money_format' %}
+							{%- assign price = product.price_min | money -%}
+						{% else %}
+							{%- assign price = product.price_min | money_with_currency -%}
+						{% endif %}
+						<span class="standard money">{{ 'products.product.from_text_html' | t: price: price }}</span>
+					{% else %}
+						{% if settings.currency_format == 'money_format' %}
+							<span class="standard money">{{ product.price | money }}</span>
+						{% else %}
+							<span class="standard money">{{ product.price | money_with_currency }}</span>
+						{% endif %}
+					{% endif %}
+
+				{% endif %}
+
+			</div>
+
+			{% if settings.show_product_reviews %}
+				<span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+			{% endif %}
+
+			{% if product.available %}
+				{% if product.has_only_default_variant %}
+				<form action="/cart/add" method="post">
+					{%- assign first_variant = product.first_available_variant -%}
+					<input type="hidden" name="id" value="{{ first_variant.id }}" />
+					<button type="submit">{{ 'products.product.add_to_cart' | t }}</button>
+				</form>
+				{% else %}
+					<a href="{{ product.url | within: collection }}" class="btn-primary full">{{ 'products.product.select_variant' | t }}</a>
+				{% endif %}
+			{% else %}
+				<div class="btn-primary" disabled="disabled">
+					{{ 'products.product.sold_out' | t }}
+				</div>
+			{% endif %}
+
+		</div>
+	</div>
+
+	{% if settings.collection_show_sale_label %}
+		{% if product.compare_at_price > product.price %}
+			<div class="label sale">{{ 'products.product.sale' | t }}</div>
+		{% endif %}
+	{% endif %}
+
+	{% if settings.collection_show_new_label %}
+		{%- assign product_created_at = product.created_at | date: '%s' -%}
+		{%- assign time_ago = 'now' | date: '%s' | minus: product_created_at | divided_by: 86400 -%}
+		{% if time_ago < 30 %}
+			<div class="label new">{{ 'products.product.new' | t }}</div>
+		{% endif %}
+	{% endif %}
+
+</div>

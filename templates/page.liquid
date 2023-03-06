@@ -1,0 +1,16 @@
+{% if settings.pages_hero_image != blank %}
+<section id="hero" style="background-image: url('{{ settings.pages_hero_image | img_url: '2000x500', crop: 'center' }}');">
+{% else %}
+<section id="hero">
+{% endif %}
+	<div class="container">
+		<h1>{{ page.title }}</h1>
+	</div>
+</section>
+<div id="one-column">
+	<div class="container">
+		<div id="content" class="wysiwyg-content smaller-padding">
+			{{ page.content }}
+		</div>
+	</div>
+</div>

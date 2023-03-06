@@ -1,0 +1,85 @@
+<div class="container">
+	<div class="popular-collections">
+
+		{% if section.settings.title != blank or section.settings.subtitle != blank %}
+		<div class="headings">
+
+			{% if section.settings.title != blank %}
+				<h3>{{ section.settings.title | escape }}</h3>
+			{% endif %}
+
+			{% if section.settings.subtitle != blank %}
+				<p>{{ section.settings.subtitle | escape }}</p>
+			{% endif %}
+
+		</div>
+		{% endif %}
+
+		<div class="collections-grid">
+
+			{% for block in section.blocks limit: section.blocks.size %}
+				{%- assign collection = collections[block.settings.collection] -%}
+				{% include 'collection-item' %}
+			{% endfor %}
+
+			{% if section.blocks.size == 0 %}
+				{% include 'no-blocks' %}
+			{% endif %}
+
+		</div>
+	</div>
+</div>
+
+{% schema %}
+{
+	"name": "Collection List",
+	"max_blocks": 12,
+	"settings": [
+		{
+			"type": "text",
+			"id": "title",
+			"label": "Heading",
+			"default": "Popular collections"
+		},
+		{
+			"type": "text",
+			"id": "subtitle",
+			"label": "Subheading",
+			"default": "Best of category shop for you"
+		}
+	],
+	"blocks": [
+		{
+			"type": "collection",
+			"name": "Collection",
+			"settings": [
+			{
+				"label": "Collection",
+				"id": "collection",
+				"type": "collection"
+			}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "Collection List",
+			"category": "Collection",
+			"blocks": [
+				{
+					"type": "collection"
+				},
+				{
+					"type": "collection"
+				},
+				{
+					"type": "collection"
+				},
+				{
+					"type": "collection"
+				}
+			]
+		}
+	]
+}
+{% endschema %}

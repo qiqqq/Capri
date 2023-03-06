@@ -1,0 +1,53 @@
+<div class="container">
+
+	{% if section.settings.title != blank or section.settings.subtitle != blank %}
+	<div class="headings">
+
+		{% if section.settings.title != blank %}
+  			<h3>{{ section.settings.title | escape }}</h3>
+		{% endif %}
+
+		{% if section.settings.subtitle != blank %}
+			<p>{{ section.settings.subtitle | escape }}</p>
+		{% endif %}
+
+	</div>
+	{% endif %}
+
+	<div class="wysiwyg-content">
+		{{ section.settings.html }}
+	</div>
+
+</div>
+
+{% schema %}
+{
+	"name": "Custom HTML",
+	"settings": [
+		{
+			"type": "text",
+			"id": "title",
+			"label": "Heading",
+			"default": "Custom HTML"
+		},
+		{
+			"type": "text",
+			"id": "subtitle",
+			"label": "Subheading",
+			"default": "Nunc id imperdiet risus"
+		},
+		{
+			"type": "html",
+			"id": "html",
+			"label": "HTML",
+			"default": "<p>Nullam a augue a neque egestas egestas. Nunc id imperdiet risus:</p><ul><li>Nunc massa ex, elementum a nisi in</li><li>Laoreet dictum sapien. Cras eu placerat urna</li><li>Ut id orci porta, tempor lorem mattis, rhoncus arcu</li></ul><p>Praesent ac vulputate sem. Sed at mattis velit. Aenean non diam accumsan, facilisis dolor sed, pulvinar odio. Ut maximus, turpis a rhoncus pulvinar, massa nisi luctus velit, non pretium neque quam eu orci. Suspendisse justo elit, mattis ac metus quis, fringilla pharetra velit.</p>"
+		}
+	],
+	"presets": [
+		{
+			"name": "Custom HTML",
+			"category": "Text"
+		}
+	]
+}
+{% endschema %}

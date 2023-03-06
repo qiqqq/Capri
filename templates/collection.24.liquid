@@ -1,0 +1,71 @@
+{% paginate collection.products by 24 %}
+
+	{% if collection.image %}
+		<section id="hero" style="background-image: url('{{ collection | img_url: '2000x500' }}');">
+	{% else %}
+		<section id="hero">
+	{% endif %}
+		<div class="container">
+			<h1>{{ collection.title }}</h1>
+			{{ collection.description }}
+		</div>
+	</section>
+
+	{% if collection.all_products_count != 0 %}
+
+		{% if settings.show_collection_filters_sidebar %}
+		<div id="two-columns">
+		{% else %}
+		<div id="one-column">
+		{% endif %}
+			<div class="container">
+
+				{% if settings.show_collection_filters_sidebar %}
+					<aside id="sidebar">
+						<h5 class="toggle-filters-mobile" data-js="">
+							<a href="#">
+								<span>{{ 'collections.filtering.filters' | t }}</span>
+								<i class="icon-arrow-down"></i>
+							</a>
+						</h5>
+						{% section 'filters-sidebar' %}
+					</aside>
+				{% endif %}
+
+				<div id="content">
+
+					{% if collection.products_count != 0 %}
+
+						{% section 'filters-toolbar' %}
+
+						<div id="products-container" class="products-grid">
+
+							{% for product in collection.products %}
+								{% include 'product-item' %}
+							{% endfor %}
+						
+						</div>
+					
+						{% if paginate.pages > 1 %}
+			    			{% include 'pagination' %}
+			  			{% endif %}
+
+					{% else %}
+						<p class="empty">{{ 'collections.collection.empty_filtering' | t }}</p>
+		  			{% endif %}
+
+				</div>
+			</div>
+		</div>
+
+  	{% else %}
+  		<div id="one-column">
+  			<div class="container">
+  				<div id="content">
+					<p class="empty">{{ 'collections.collection.empty' | t }}</p>
+				</div>
+			</div>
+		</div>
+	{% endif %}
+
+{% endpaginate %}

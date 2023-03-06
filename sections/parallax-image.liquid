@@ -1,0 +1,40 @@
+{% if section.settings.image != blank %}
+	<div class="parallax" 
+		style="min-height: {{ section.settings.height }}px"
+		data-parallax="scroll" 
+		data-z-index="2" 
+		data-image-src="{{ section.settings.image | img_url: 'master' }}">
+	</div>
+{% else %}
+	{{ 'image' | placeholder_svg_tag: 'placeholder-image parallax' }}
+{% endif %}
+
+{% schema %}
+{
+	"name": "Parallax Image",
+	"class": "parallax-section",
+	"settings": [
+		{
+			"type": "image_picker",
+			"id": "image",
+			"label": "Image"
+		},
+		{
+			"type": "range",
+			"id": "height",
+			"min": 200,
+			"max": 800,
+			"step": 50,
+			"unit": "px",
+			"label": "Image height",
+			"default": 400
+		}
+	],
+	"presets": [
+		{
+			"name": "Parallax Image",
+			"category": "Image"
+		}
+	]
+}
+{% endschema %}

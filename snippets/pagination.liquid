@@ -1,0 +1,62 @@
+<div id="pagination">
+
+	{%- assign allow_first_last = false -%}
+	{% if template contains 'collection' %}
+		{%- assign allow_first_last = true -%}
+		{%- assign base_url = collection.url -%}
+	{% endif %}
+
+	{% if template contains 'blog' %}
+		{%- assign allow_first_last = true -%}
+		{%- assign base_url = blog.url -%}
+	{% endif %}
+
+	{% if allow_first_last and paginate.previous.is_link  %}
+		<a href="{{ base_url }}?page=1" class="first">
+			<i class="icon-arrow-left"></i>
+			<i class="icon-arrow-left"></i>
+		</a>
+	{% else %}
+		<span class="placeholder"></span>
+	{% endif %}
+
+	{% if paginate.previous.is_link %}
+    	<a href="{{ paginate.previous.url }}" class="prev">
+	    	<i class="icon-arrow-left"></i>
+	    </a>
+	{% else %}
+		<span class="placeholder"></span>
+	{% endif %}
+
+	{% for part in paginate.parts %}
+		{% if part.is_link %}
+			<a href="{{ part.url }}" class="number">{{ part.title }}</a>
+		{% else %}
+			{% if part.title == "&hellip;" %}
+				<span class="delimiter">{{ part.title }}</span>
+			{% else %}
+				<span class="current">
+					{{ part.title }}<span class="mobile-info"> <small>/</small> {{ paginate.pages }}</span>
+				</span>
+			{% endif %}
+		{% endif %}
+	{% endfor %}
+
+	{% if paginate.next.is_link %}
+    	<a href="{{ paginate.next.url }}" class="next">
+	    	<i class="icon-arrow-right"></i>
+	    </a>
+	{% else %}
+		<span class="placeholder"></span>
+	{% endif %}
+
+	{% if allow_first_last and paginate.next.is_link  %}
+	<a href="{{ base_url }}?page={{ paginate.pages }}" class="last">
+		<i class="icon-arrow-right"></i>
+		<i class="icon-arrow-right"></i>
+	</a>
+	{% else %}
+		<span class="placeholder"></span>
+	{% endif %}
+
+</div>

@@ -1,0 +1,29 @@
+{% comment %}
+  This page represents the /collections and /products pages.
+{% endcomment %}
+
+{% if settings.collection_list_hero_image != blank %}
+<section id="hero" style="background-image: url('{{ settings.collection_list_hero_image | img_url: '2000x500', crop: 'center' }}');">
+{% else %}
+<section id="hero">
+{% endif %}
+	<div class="container">
+		<h1>{{ page_title }}</h1>
+	</div>
+</section>
+
+<div id="one-column">
+	<div class="container">
+		<div id="content">
+			<div class="collections-grid">
+
+				{% for collection in collections %}
+					{% unless collection.handle == 'frontpage' %}
+						{% include 'collection-item' %}
+					{% endunless %}
+				{% endfor %}
+
+			</div>
+		</div>
+	</div>
+</div>

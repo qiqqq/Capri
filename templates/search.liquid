@@ -1,0 +1,46 @@
+{% paginate search.results by 5 %}
+
+<div id="search">
+	<div class="container">
+
+		<div class="headings">
+			<h1 class="h3">{{ 'general.search.title' | t }}</h1>
+			<p>{{ 'general.search.subtitle' | t }}</p>
+		</div>
+
+		<form action="/search" method="get" role="search">
+			<div class="field">
+				<input type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t }}" autofocus />
+			</div>
+			<div class="field">
+				<button type="submit" class="full">{{ 'general.search.submit' | t }}</button>
+			</div>
+		</form>
+
+		{% if search.performed %}
+			<div class="results">
+				<p>
+	      			{% if search.results_count == 0 %}
+	        			{{ 'general.search.no_results_html' | t: terms: search.terms }}
+	      			{% else %}
+	        			{{ 'general.search.results_for_html' | t: terms: search.terms }}
+	      			{% endif %}
+				</p>
+			</div>
+	
+			<div class="products-grid">
+				{% for product in search.results %}
+					{% include 'product-item' %}
+				{% endfor %}
+			</div>	
+
+		    {% if paginate.pages > 1 %}
+     			{% include 'pagination' %}
+    		{% endif %}
+
+		{% endif %}
+
+	</div>
+</div>
+
+{% endpaginate %}

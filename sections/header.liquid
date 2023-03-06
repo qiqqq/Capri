@@ -1,0 +1,743 @@
+<div id="side-nav">
+	<div class="inner">
+		<ul>
+			{% if section.settings.menu_type == 'simple' %}
+				{% for link in linklists[section.settings.main_linklist].links %}
+					{%- assign child_list_handle = link.title | handleize -%}
+					{% if menus[child_list_handle].links != blank %}
+							<li {% if link.active %}class="active"{% endif %}>
+								<a href="{{ link.url }}" title="{{ link.title }}">{{ link.title }}</a>
+								<ul>
+									{% for childlink in menus[child_list_handle].links %}
+										{%- assign child_list_handle2 = childlink.title | handleize -%}
+										{% if menus[child_list_handle2].links != blank %}
+											<li {% if childlink.active %}class="active"{% endif %}>
+												<a href="{{ childlink.url }}" title="{{ childlink.title }}" >{{ childlink.title }}</a>
+												<ul>
+													{% for childlink2 in menus[child_list_handle2].links %}
+													<li {% if childlink2.active %}class="active"{% endif %}>
+														<a href="{{ childlink2.url }}" title="{{ childlink2.title }}">{{ childlink2.title }}</a>
+													</li>
+													{% endfor %}
+												</ul>
+											</li>
+										{% else %}
+											<li {% if childlink.active %}class="active"{% endif %}>
+												<a href="{{ childlink.url }}" title="{{ childlink.title }}">{{ childlink.title }}</a>
+											</li>
+										{% endif %}
+									{% endfor %}
+								</ul>
+							</li>
+						{% else %}
+						<li {% if link.active %}class="active"{% endif %}>
+							<a href="{{ link.url }}" title="{{ link.title }}">{{ link.title }}</a>
+						</li>
+					{% endif %}
+				{% endfor %}
+			{% else %}
+				{% for block in section.blocks %}  
+					<li>
+						<a href="{{ block.settings.item_url }}">{{ block.settings.item_text }}</a>
+						{% if block.settings.submenu_type == 'links_list' or block.settings.submenu_type == 'links_list_banner_left' or block.settings.submenu_type == 'links_list_banner_right' %}
+							<ul>
+								{% for link in linklists[block.settings.submenu_linklist].links %}
+								{%- assign child_list_handle = link.title | handleize -%}
+								{% if menus[child_list_handle].links != blank %}
+										<li {% if link.active %}class="active"{% endif %}>
+											<a href="{{ link.url }}" title="{{ link.title }}">{{ link.title }}</a>
+											<ul>
+												{% for childlink in menus[child_list_handle].links %}
+													{%- assign child_list_handle2 = childlink.title | handleize -%}
+													{% if menus[child_list_handle2].links != blank %}
+														<li {% if childlink.active %}class="active"{% endif %}>
+															<a href="{{ childlink.url }}" title="{{ childlink.title }}" >{{ childlink.title }}</a>
+															<ul>
+																{% for childlink2 in menus[child_list_handle2].links %}
+																<li {% if childlink2.active %}class="active"{% endif %}>
+																	<a href="{{ childlink2.url }}" title="{{ childlink2.title }}">{{ childlink2.title }}</a>
+																</li>
+																{% endfor %}
+															</ul>
+														</li>
+													{% else %}
+														<li {% if childlink.active %}class="active"{% endif %}>
+															<a href="{{ childlink.url }}" title="{{ childlink.title }}">{{ childlink.title }}</a>
+														</li>
+													{% endif %}
+												{% endfor %}
+											</ul>
+										</li>
+									{% else %}
+									<li {% if link.active %}class="active"{% endif %}>
+										<a href="{{ link.url }}" title="{{ link.title }}">{{ link.title }}</a>
+									</li>
+								{% endif %}
+							{% endfor %}
+							</ul>
+						{% elsif block.settings.submenu_type == 'collections_list' %}
+							<ul>
+								
+								{% if block.settings.first_collection != blank %}
+								{% assign firstCollection = collections[block.settings.first_collection] %}
+								<li>
+									<a href="{{ firstCollection.url }}">{{ firstCollection.title }}</a>
+									<ul>
+										{% for link in linklists[block.settings.first_collection_menu].links %}
+											<li {% if link.active %}class="active"{% endif %}>
+												<a href="{{ link.url }}">{{ link.title }}</a>
+											</li>
+										{% endfor %}
+									</ul>
+								</li>
+								{% endif %}
+
+								{% if block.settings.second_collection != blank %}
+								{% assign secondCollection = collections[block.settings.second_collection] %}
+								<li>
+									<a href="{{ secondCollection.url }}">{{ secondCollection.title }}</a>
+									<ul>
+										{% for link in linklists[block.settings.second_collection_menu].links %}
+											<li {% if link.active %}class="active"{% endif %}>
+												<a href="{{ link.url }}">{{ link.title }}</a>
+											</li>
+										{% endfor %}
+									</ul>
+								</li>
+								{% endif %}
+
+								{% if block.settings.third_collection != blank %}
+								{% assign thirdCollection = collections[block.settings.third_collection] %}
+								<li>
+									<a href="{{ thirdCollection.url }}">{{ thirdCollection.title }}</a>
+									<ul>
+										{% for link in linklists[block.settings.third_collection_menu].links %}
+											<li {% if link.active %}class="active"{% endif %}>
+												<a href="{{ link.url }}">{{ link.title }}</a>
+											</li>
+										{% endfor %}
+									</ul>													
+								</li>
+								{% endif %}
+
+								{% if block.settings.fourth_collection != blank %}
+								{% assign fourthCollection = collections[block.settings.fourth_collection] %}
+								<li>
+									<a href="{{ fourthCollection.url }}">{{ fourthCollection.title }}</a>
+									<ul>
+										{% for link in linklists[block.settings.fourth_collection_menu].links %}
+											<li {% if link.active %}class="active"{% endif %}>
+												<a href="{{ link.url }}">{{ link.title }}</a>
+											</li>
+										{% endfor %}
+									</ul>														
+								</li>
+								{% endif %}
+
+								{% if block.settings.fifth_collection != blank %}
+								{% assign fifthCollection = collections[block.settings.fifth_collection] %}
+								<li>
+									<a href="{{ fifthCollection.url }}">{{ fifthCollection.title }}</a>
+									<ul>
+										{% for link in linklists[block.settings.fifth_collection_menu].links %}
+											<li {% if link.active %}class="active"{% endif %}>
+												<a href="{{ link.url }}">{{ link.title }}</a>
+											</li>
+										{% endfor %}
+									</ul>	
+								</li>
+								{% endif %}
+
+							</ul>
+						{% endif %}
+					</li>
+				{% endfor %}
+			{% endif %}
+
+			{% if section.settings.show_search_button %}
+				{% if section.settings.search_button_type == 'popup' %}
+					{% assign searchHref = '#search' %}
+				{% elsif section.settings.search_button_type == 'page' %}
+					{% assign searchHref = '/search' %}
+				{% endif %}
+				<li>
+					<a href="{{ searchHref }}" class="with-icon">
+						<span>{{ 'layout.menu.search' | t }}</span>
+						<i class="icon-search"></i>
+					</a>
+				</li>
+			{% endif %}
+
+			{% if shop.customer_accounts_enabled %}
+				<li>
+					{% if customer %}
+						<a href="/account" class="with-icon">
+					{% else %}
+	          			<a href="/account/login" class="with-icon">
+	        		{% endif %}
+						<span>{{ 'layout.menu.account' | t }}</span>
+						<i class="icon-user"></i>
+					</a>
+				</li>
+			{% endif %}
+
+			<!--<li>
+				<select name="name">
+					<option value="#">PL</option>
+				</select>
+			</li>-->
+
+			{% if settings.show_multiple_currencies %}
+				<li>
+					<select class="currency-picker" name="currencies">
+  						{% assign codes = 'USD,EUR,GBP,CAD,ARS,AUD,BBD,BDT,BSD,BHD,BRL,BOB,BND,BGN,ILS,MMK,KYD,CLP,CNY,COP,CRC,HRK,CZK,DKK,DOP,XCD,EGP,XPF,FJD,GHS,GTQ,GYD,GEL,HKD,HUF,ISK,INR,IDR,NIS,JMD,JPY,JOD,KZT,KES,KWD,LVL,LTL,MXN,MYR,MUR,MDL,MAD,MNT,MZN,ANG,NZD,NGN,NOK,OMR,PKR,PYG,PEN,PHP,PLN,QAR,RON,RUB,SAR,RSD,SCR,SGD,SYP,ZAR,KRW,LKR,SEK,CHF,TWD,THB,TZS,TTD,TRY,UAH,AED,UYU,VEB,VND,ZMK' | split: ',' %}
+  						{% assign supported_codes = settings.supported_currencies | split: ' ' %}
+  						<option value="{{ shop.currency }}" selected="selected">{{ shop.currency }}</option>
+  						{% for code in supported_codes %}
+    						{% if code != shop.currency and codes contains code %}
+    							<option value="{{ code }}">{{ code }}</option>
+    						{% endif %}
+  						{% endfor %}
+  					</select>
+				</li>
+			{% endif %}
+
+		</ul>
+	</div>
+</div>
+
+{% if section.settings.menu_type == 'mega' %}
+<header id="header" class="with-mega-menu">
+{% else %}
+<header id="header">
+{% endif %}
+
+	{% if section.settings.top_message != blank %}
+		<script>
+			document.querySelector('body').classList.add("top-message-enabled");
+		</script>
+		<div class="message">
+			<p>{{ section.settings.top_message }}</p>
+		</div>
+	{% endif %}
+
+	<div class="container">
+		<nav class="mobile-nav">
+			<a href="#side-nav" class="mobile-nav-trigger hidden-xl-up">
+				<i class="icon-menu"></i>
+				<i class="icon-close"></i>
+			</a>
+		</nav>
+		<div class="logo" itemscope itemtype="http://schema.org/Organization">
+			<a href="/" itemprop="url">
+				{% if section.settings.logo != blank %}
+					<img src="{{ section.settings.logo | img_url }}" 
+					alt="{{ section.settings.logo.alt | default: shop.name }}" 
+					itemprop="logo">
+				{% else %}
+            		{{ shop.name }}
+          		{% endif %}
+			</a>
+		</div>
+		<nav class="main-nav">
+			<ul>
+				{% if section.settings.menu_type == 'simple' %}
+					{% for link in linklists[section.settings.main_linklist].links %}
+						{%- assign child_list_handle = link.title | handleize -%}
+						{% if menus[child_list_handle].links != blank %}
+							<li {% if link.active %}class="active"{% endif %}>
+								<a href="{{ link.url }}">{{ link.title }}</a>
+								<ul>
+									{% for childlink in menus[child_list_handle].links %}
+										{%- assign child_list_handle2 = childlink.title | handleize -%}
+										{% if menus[child_list_handle2].links != blank %}
+											<li {% if childlink.active %}class="active"{% endif %}>
+												<a href="{{ childlink.url }}">{{ childlink.title }}</a>
+												<ul>
+													{% for childlink2 in menus[child_list_handle2].links %}
+													<li {% if childlink2.active %}class="active"{% endif %}>
+														<a href="{{ childlink2.url }}">{{ childlink2.title }}</a>
+													</li>
+													{% endfor %}
+												</ul>
+											</li>
+										{% else %}
+											<li {% if childlink.active %}class="active"{% endif %}>
+												<a href="{{ childlink.url }}">{{ childlink.title }}</a>
+											</li>
+										{% endif %}
+									{% endfor %}
+								</ul>
+							</li>
+						{% else %}
+							<li {% if link.active %}class="active"{% endif %}>
+								<a href="{{ link.url }}">{{ link.title }}</a>
+							</li>
+						{% endif %}
+					{% endfor %}
+				{% else %}
+					{% for block in section.blocks %}  
+						<li class="mega-menu-child">
+							<a href="{{ block.settings.item_url }}">{{ block.settings.item_text }}</a>
+							{% if block.settings.submenu_type != 'none' %}
+								{% if section.settings.enable_underline %}
+								<div class="mega-menu links-underline">
+								{% else %}
+								<div class="mega-menu">
+								{% endif %}
+									<div class="mega-menu-inner">
+										<div class="container">
+											{% if block.settings.submenu_type == 'links_list' or block.settings.submenu_type == 'links_list_banner_left' or block.settings.submenu_type == 'links_list_banner_right' %}
+
+												{% if block.settings.submenu_type == 'links_list_banner_left' %}
+												<div class="banner">
+													{% if block.settings.banner_url != blank %}
+													<a href="{{ block.settings.banner_url }}">
+													{% endif %}
+
+														{% if block.settings.banner_image != blank %}
+															{{ block.settings.banner_image.src | img_url: '250x250' | img_tag }}
+														{% endif %}
+														
+													{% if block.settings.banner_url != blank %}
+													</a>
+													{% endif %}
+												</div>
+												{% endif %}
+
+												{% if block.settings.submenu_type == 'links_list_banner_left' or block.settings.submenu_type == 'links_list_banner_right' %}
+												<ul class="with-banner">
+												{% else %}
+												<ul>
+												{% endif %}
+												{% for link in linklists[block.settings.submenu_linklist].links %}
+													{%- assign child_list_handle = link.title | handleize -%}
+													{% if menus[child_list_handle].links != blank %}
+														<li {% if link.active %}class="active"{% endif %}>
+															<a href="{{ link.url }}">{{ link.title }}</a>
+															<ul>
+																{% for childlink in menus[child_list_handle].links %}
+																	{%- assign child_list_handle2 = childlink.title | handleize -%}
+																	{% if menus[child_list_handle2].links != blank %}
+																		<li {% if childlink.active %}class="active"{% endif %}>
+																			<a href="{{ childlink.url }}">{{ childlink.title }}</a>
+																			<ul>
+																				{% for childlink2 in menus[child_list_handle2].links %}
+																				<li {% if childlink2.active %}class="active"{% endif %}>
+																					<a href="{{ childlink2.url }}">{{ childlink2.title }}</a>
+																				</li>
+																				{% endfor %}
+																			</ul>
+																		</li>
+																	{% else %}
+																		<li {% if childlink.active %}class="active"{% endif %}>
+																			<a href="{{ childlink.url }}">{{ childlink.title }}</a>
+																		</li>
+																	{% endif %}
+																{% endfor %}
+															</ul>
+														</li>
+													{% else %}
+														<li {% if link.active %}class="active"{% endif %}>
+															<a href="{{ link.url }}">{{ link.title }}</a>
+														</li>
+													{% endif %}
+												{% endfor %}
+												</ul>
+
+												{% if block.settings.submenu_type == 'links_list_banner_right' %}
+												<div class="banner">
+													{% if block.settings.banner_url != blank %}
+													<a href="{{ block.settings.banner_url }}">
+													{% endif %}
+
+														{% if block.settings.banner_image != blank %}
+															{{ block.settings.banner_image.src | img_url: '250x250' | img_tag }}
+														{% endif %}
+														
+													{% if block.settings.banner_url != blank %}
+													</a>
+													{% endif %}
+												</div>
+												{% endif %}
+
+											{% elsif block.settings.submenu_type == 'collections_list' %}
+
+												<ul class="collections">
+													
+													{% if block.settings.first_collection != blank %}
+													{% assign firstCollection = collections[block.settings.first_collection] %}
+													<li>
+														<a href="{{ firstCollection.url }}">{{ firstCollection.title }}</a>
+														{% if firstCollection.image != blank %}
+															<a href="{{ firstCollection.url }}">
+															{{ firstCollection.image | img_url: '250x100', crop: 'center' | img_tag }}
+															</a>
+														{% endif %}
+														<ul>
+															{% for link in linklists[block.settings.first_collection_menu].links %}
+																<li {% if link.active %}class="active"{% endif %}>
+																	<a href="{{ link.url }}">{{ link.title }}</a>
+																</li>
+															{% endfor %}
+														</ul>
+													</li>
+													{% endif %}
+
+													{% if block.settings.second_collection != blank %}
+													{% assign secondCollection = collections[block.settings.second_collection] %}
+													<li>
+														<a href="{{ secondCollection.url }}">{{ secondCollection.title }}</a>
+														{% if secondCollection.image != blank %}
+															<a href="{{ secondCollection.url }}">
+															{{ secondCollection.image | img_url: '250x100', crop: 'center' | img_tag }}
+															</a>
+														{% endif %}
+														<ul>
+															{% for link in linklists[block.settings.second_collection_menu].links %}
+																<li {% if link.active %}class="active"{% endif %}>
+																	<a href="{{ link.url }}">{{ link.title }}</a>
+																</li>
+															{% endfor %}
+														</ul>
+													</li>
+													{% endif %}
+
+													{% if block.settings.third_collection != blank %}
+													{% assign thirdCollection = collections[block.settings.third_collection] %}
+													<li>
+														<a href="{{ thirdCollection.url }}">{{ thirdCollection.title }}</a>
+														{% if thirdCollection.image != blank %}
+															<a href="{{ thirdCollection.url }}">
+															{{ thirdCollection.image | img_url: '250x100', crop: 'center' | img_tag }}
+															</a>
+														{% endif %}
+														<ul>
+															{% for link in linklists[block.settings.third_collection_menu].links %}
+																<li {% if link.active %}class="active"{% endif %}>
+																	<a href="{{ link.url }}">{{ link.title }}</a>
+																</li>
+															{% endfor %}
+														</ul>													
+													</li>
+													{% endif %}
+
+													{% if block.settings.fourth_collection != blank %}
+													{% assign fourthCollection = collections[block.settings.fourth_collection] %}
+													<li>
+														<a href="{{ fourthCollection.url }}">{{ fourthCollection.title }}</a>
+														{% if fourthCollection.image != blank %}
+															<a href="{{ fourthCollection.url }}">
+															{{ fourthCollection.image | img_url: '250x100', crop: 'center' | img_tag }}
+															</a>
+														{% endif %}
+														<ul>
+															{% for link in linklists[block.settings.fourth_collection_menu].links %}
+																<li {% if link.active %}class="active"{% endif %}>
+																	<a href="{{ link.url }}">{{ link.title }}</a>
+																</li>
+															{% endfor %}
+														</ul>														
+													</li>
+													{% endif %}
+
+													{% if block.settings.fifth_collection != blank %}
+													{% assign fifthCollection = collections[block.settings.fifth_collection] %}
+													<li>
+														<a href="{{ fifthCollection.url }}">{{ fifthCollection.title }}</a>
+														{% if fifthCollection.image != blank %}
+															<a href="{{ fifthCollection.url }}">
+															{{ fifthCollection.image | img_url: '250x100', crop: 'center' | img_tag }}
+															</a>
+														{% endif %}
+														<ul>
+															{% for link in linklists[block.settings.fifth_collection_menu].links %}
+																<li {% if link.active %}class="active"{% endif %}>
+																	<a href="{{ link.url }}">{{ link.title }}</a>
+																</li>
+															{% endfor %}
+														</ul>	
+													</li>
+													{% endif %}
+
+												</ul>
+
+											{% endif %}
+										</div>
+									</div>
+								</div>
+							{% endif %}
+						</li>
+					{% endfor %}
+				{% endif %}
+			</ul>
+		</nav>
+		<nav class="additional-nav">
+			<ul>
+				{% if section.settings.show_search_button %}
+					{% if section.settings.search_button_type == 'popup' %}
+						{% assign searchHref = '#search' %}
+					{% elsif section.settings.search_button_type == 'page' %}
+						{% assign searchHref = '/search' %}
+					{% endif %}
+					<li class="hidden-xl-down">
+						<a href="{{ searchHref }}">
+							<i class="icon-search"></i>
+						</a>
+					</li>
+				{% endif %}
+
+				{% if shop.customer_accounts_enabled %}
+					<li class="hidden-xl-down">
+						{% if customer %}
+							<a href="/account"><i class="icon-user"></i></a>
+						{% else %}
+	          				<a href="/account/login"><i class="icon-user"></i></a>
+	        			{% endif %}
+					</li>
+				{% endif %}
+
+				<li>
+					<a href="/cart">
+						<i class="icon-cart"></i>
+
+						{% unless cart.item_count == 0 %}
+						<span class="count">{{ cart.item_count }}</span>
+						{% endunless %}
+
+					</a>
+				</li>
+
+				<!-- <li class="hidden-xl-down with-select">
+					<div class="raw-select">
+						<select name="language" class="raw">
+							<option value="EN">EN</option>
+							<option value="PL">PL</option>
+						</select>
+						<i class="icon-arrow-down with-select"></i>
+					</div>
+				</li>-->
+
+				{% if settings.show_multiple_currencies %}
+					<li class="hidden-xl-down">
+						<div class="raw-select">
+							<select class="currency-picker raw" name="currencies">
+		  						{% assign codes = 'USD,EUR,GBP,CAD,ARS,AUD,BBD,BDT,BSD,BHD,BRL,BOB,BND,BGN,ILS,MMK,KYD,CLP,CNY,COP,CRC,HRK,CZK,DKK,DOP,XCD,EGP,XPF,FJD,GHS,GTQ,GYD,GEL,HKD,HUF,ISK,INR,IDR,NIS,JMD,JPY,JOD,KZT,KES,KWD,LVL,LTL,MXN,MYR,MUR,MDL,MAD,MNT,MZN,ANG,NZD,NGN,NOK,OMR,PKR,PYG,PEN,PHP,PLN,QAR,RON,RUB,SAR,RSD,SCR,SGD,SYP,ZAR,KRW,LKR,SEK,CHF,TWD,THB,TZS,TTD,TRY,UAH,AED,UYU,VEB,VND,ZMK' | split: ',' %}
+		  						{% assign supported_codes = settings.supported_currencies | split: ' ' %}
+		  						<option value="{{ shop.currency }}" selected="selected">{{ shop.currency }}</option>
+		  						{% for code in supported_codes %}
+		    						{% if code != shop.currency and codes contains code %}
+		    							<option value="{{ code }}">{{ code }}</option>
+		    						{% endif %}
+		  						{% endfor %}
+		  					</select>
+							<i class="icon-arrow-down"></i>
+						</div>
+					</li>
+				{% endif %}
+
+			</ul>
+		</nav>
+	</div>
+</header>
+
+{% if section.settings.show_search_button and section.settings.search_button_type == 'popup' %}
+	<div data-remodal-id="search">
+		<form action="/search" method="get" role="search">
+			<div class="field">
+				<input type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t }}" autofocus />
+				<button type="submit"><i class="icon-search"></i></button>
+			</div>
+		</form>
+	</div>
+{% endif %}
+
+{% schema %}
+{
+	"name": "Header",
+	"settings": [
+		{
+			"type": "text",
+			"id": "top_message",
+			"label": "Top message"
+		},
+		{
+			"type": "image_picker",
+			"id": "logo",
+			"label": "Logo image"
+		},
+		{
+     		"type": "checkbox",
+     		"id": "show_search_button",
+     		"label": "Show search button",
+     		"default": true
+   		},
+		{
+			"type": "select",
+			"id": "search_button_type",
+			"label": "Search button type",
+			"options": [
+       			{
+         			"value": "popup",
+        			"label": "Button opens a popup with the search form"
+       			},
+       			{
+         			"value": "page",
+         			"label": "Link opens a page with the search form"
+       			}
+         	],
+			"default": "popup"
+		},
+		{
+			"type": "header",
+			"content": "Menu"
+		},
+		{
+     		"type": "checkbox",
+     		"id": "enable_underline",
+     		"label": "Enable links underline on hover",
+     		"default": false
+   		},
+		{
+			"type": "select",
+			"id": "menu_type",
+			"label": "Menu type",
+			"options": [
+       			{
+         			"value": "simple",
+        			"label": "Simple menu"
+       			},
+       			{
+         			"value": "mega",
+         			"label": "Mega menu"
+       			}
+         	],
+			"default": "simple"
+		},
+		{
+			"type": "paragraph",
+			"content": "If you selected simple menu type, select menu to display below:"
+		},
+		{
+			"type": "link_list",
+			"id": "main_linklist",
+			"label": "Simple menu",
+			"default": "main-menu"
+		},
+		{
+			"type": "paragraph",
+			"content": "If you selected mega menu, add menu items below:"
+		}
+	],
+	"blocks": [
+      	{
+        	"type": "menu-item",
+        	"name": "Menu item",
+        	"settings": [
+				{
+					"type": "text",
+					"id": "item_text",
+					"label": "Menu item's text"
+				},
+				{
+					"type": "url",
+					"id": "item_url",
+					"label": "Menu item's URL"
+				},
+				{
+					"type": "select",
+					"id": "submenu_type",
+					"label": "Submenu type",
+					"options": [
+						{
+							"value": "none",
+							"label": "None"
+						},
+						{
+							"value": "links_list",
+							"label": "Links list"
+						},
+						{
+							"value": "links_list_banner_left",
+							"label": "Links list with banner on the left"
+						},
+						{
+							"value": "links_list_banner_right",
+							"label": "Links list with banner on the right"
+						},
+						{
+							"value": "collections_list",
+							"label": "Collections list"
+						}
+					]
+				},
+				{
+					"type": "link_list",
+					"id": "submenu_linklist",
+					"label": "Links list"
+				},
+				{
+					"type": "image_picker",
+					"id": "banner_image",
+					"label": "Banner image"
+				},
+				{
+					"type": "url",
+					"id": "banner_url",
+					"label": "Banner URL" 
+				},
+				{
+					"type": "collection",
+					"id": "first_collection",
+					"label": "1st Collection" 
+				},
+				{
+					"type": "link_list",
+					"id": "first_collection_menu",
+					"label": "1st Collection menu" 
+				},
+				{
+					"type": "collection",
+					"id": "second_collection",
+					"label": "2nd Collection" 
+				},
+				{
+					"type": "link_list",
+					"id": "second_collection_menu",
+					"label": "2nd Collection menu" 
+				},
+				{
+					"type": "collection",
+					"id": "third_collection",
+					"label": "3rd Collection" 
+				},
+				{
+					"type": "link_list",
+					"id": "third_collection_menu",
+					"label": "3rd Collection menu" 
+				},
+				{
+					"type": "collection",
+					"id": "fourth_collection",
+					"label": "4th Collection" 
+				},
+				{
+					"type": "link_list",
+					"id": "fourth_collection_menu",
+					"label": "4th Collection menu" 
+				},
+				{
+					"type": "collection",
+					"id": "fifth_collection",
+					"label": "5th Collection" 
+				},
+				{
+					"type": "link_list",
+					"id": "fifth_collection_menu",
+					"label": "5th Collection menu" 
+				}
+        	]
+      	}
+    ]
+}
+{% endschema %}

@@ -1,0 +1,214 @@
+<footer id="footer">
+
+	<div class="bg-gray">
+		<div class="container">
+			<div class="row">
+				{% for block in section.blocks %}  
+					<div class="col">
+						
+						{% if block.settings.title != blank %}
+							<h4>{{ block.settings.title }}</h4>
+						{% endif %}
+
+						{% if block.settings.type == 'text' %}
+
+							{{ block.settings.text }}
+
+						{% elsif block.settings.type == 'menu' %}
+							
+							{% if block.settings.menu %}
+							<ul>
+								{% for link in linklists[block.settings.menu].links %}
+									<li><a href="{{ link.url }}" title="{{ link.title }}">{{ link.title }}</a></li>
+								{% endfor %}
+							</ul>
+							{% endif %}
+
+						{% elsif block.settings.type == 'image' %}
+							
+							{% if block.settings.image %}
+								<img src="{{ block.settings.image | img_url: 'master' }}" alt="{{ block.settings.image.alt | escape }}">
+							{% endif %}
+
+						{% elsif block.settings.type == 'text_plus_image' %}
+
+							{{ block.settings.text }}
+							
+							{% if block.settings.image %}
+								<img src="{{ block.settings.image | img_url: 'master' }}" alt="{{ block.settings.image.alt | escape }}">
+							{% endif %}
+
+                        {% elsif block.settings.type == 'newsletter' %}
+
+                            {% include 'mailchimp-newsletter' %}
+
+                        {% elsif block.settings.type == 'html' %}
+
+							<div class="custom-html">
+								{{ block.settings.html }}
+							</div>
+
+                        {% endif %}
+
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="row bottom">
+
+			{%- assign social_accounts = 'Facebook, Twitter, GooglePlus, Instagram, Pinterest, YouTube, Vimeo' | split: ', ' -%}
+			<div class="col social-icons">
+				<ul>
+					{% for social in social_accounts %}
+						{%- assign social_handle = social | handleize -%}
+						{% capture social_link %}social_{{ social_handle }}_link{% endcapture %}
+      					{% capture social_icon_class %}icon-{{ social_handle }}{% endcapture %}
+
+      					{% if settings[social_link] != blank %}
+						<li>
+							<a href="{{ settings[social_link] }}" title="{{ 'layout.footer.social_platform' | t: platform: social }}">
+								<i class="{{ social_icon_class }}"></i>
+							</a>
+						</li>
+						{% endif %}
+
+					{% endfor %}
+				</ul>
+			</div>
+			<div class="col copyright">
+				<p>{{ 'layout.footer.copyright' | t }} &copy; {{ 'now' | date: "%Y" }}</p>
+			</div>
+		</div>
+	</div>
+
+    {% if section.settings.hide_scroll_to_top == false %}
+    <a href="#" id="scroll-to-top">
+        <i class="icon-arrow-up"></i>
+    </a>
+    {% endif %}
+
+</footer>
+
+{% schema %}
+{
+    "name": "Footer",
+    "max_blocks": 4,
+    "settings": [
+        {
+            "type": "checkbox",
+            "id": "hide_scroll_to_top",
+            "label": "Hide \"Scroll to Top\" button"
+        }
+    ],
+    "blocks": [
+      	{
+        	"type": "widget",
+        	"name": "Widget",
+        	"settings": [
+        	{
+				"type": "text",
+				"id": "title",
+			   	"label": "Title"
+			},
+          	{
+				"type": "select",
+				"id": "type",
+			   	"label": "Widget type",
+			   	"options": [
+			    	{
+			       		"value": "text",
+			       		"label": "Text"
+			    	},
+			     	{
+			       		"value": "image",
+			       		"label": "Image"
+			     	},
+			     	{
+			       		"value": "text_plus_image",
+			       		"label": "Text + image"
+			     	},
+			     	{
+			       		"value": "menu",
+			       		"label": "Menu"
+			     	},
+                    {
+                        "value": "newsletter",
+                        "label": "MailChimp Newsletter"
+                    },
+                    {
+                        "value": "html",
+                        "label": "Custom HTML Code"
+                    }
+			   ],
+			   "info": "Select type of widget block you want to add to footer"
+			},
+			{
+				"type": "richtext",
+				"id": "text",
+			   	"label": "Text"
+			},
+			{
+				"type": "link_list",
+				"id": "menu",
+			   	"label": "Menu"
+			},
+			{
+				"type": "image_picker",
+				"id": "image",
+			   	"label": "Image" 
+			},
+            {
+                "type": "html",
+                "id": "html",
+                "label": "Custom HTML Code" 
+            },
+            {
+                "type": "text",
+                "id": "mailchimp_form_url",
+                "label": "MailChimp Form URL" 
+            }
+        ]
+      }
+    ],
+    "default": {
+        "blocks": [
+			{
+				"type": "widget",
+				"settings": {
+			  		"title": "Our Store",
+			  		"type": "menu",
+			  		"menu": "footer"
+				}
+			},
+			{
+				"type": "widget",
+				"settings": {
+			  		"title": "Collections",
+			  		"type": "menu",
+			  		"menu": "collections-menu"
+				}
+			},
+			{
+				"type": "widget",
+				"settings": {
+			  		"title": "Payment Methods",
+			  		"type": "text_plus_image",
+			  		"text": "<p>We accept PayPay and Credit Cards payments</p>"
+				}
+			},
+			{
+				"type": "widget",
+                "settings": {
+                    "title": "Our newsletter",
+                    "type": "newsletter",
+                    "text": "<p>Subscribe to our newsletter to keep up to date on products and discounts.</p>",
+                    "mailchimp_form_url": "https://kikowsky.us12.list-manage.com/subscribe/post?u=11f53a78ee1899244f950099f&amp;id=f8e1720389"
+                }
+			}
+        ]
+    }
+}
+{% endschema %}

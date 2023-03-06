@@ -1,0 +1,64 @@
+<div id="filters-toolbar">
+
+	{% if section.settings.show_sort_switcher %}
+		<label for="sort-by">
+			<span class="label">{{ 'collections.collection.sort_by' | t }}:</span>
+			<select name="sort_by" id="sort-by" class="raw" data-default="{{ collection.default_sort_by | escape }}">
+				<option value="manual">{{ 'collections.sorting.featured' | t }}</option>
+			    <option value="best-selling">{{ 'collections.sorting.best_selling' | t }}</option>
+			    <option value="title-ascending">{{ 'collections.sorting.title_ascending' | t }}</option>
+			    <option value="title-descending">{{ 'collections.sorting.title_descending' | t }}</option>
+			    <option value="price-ascending">{{ 'collections.sorting.price_ascending' | t }}</option>
+			    <option value="price-descending">{{ 'collections.sorting.price_descending' | t }}</option>
+			    <option value="created-ascending">{{ 'collections.sorting.created_ascending' | t }}</option>
+			    <option value="created-descending">{{ 'collections.sorting.created_descending' | t }}</option>
+			</select>
+		</label>
+	{% endif %}
+
+	{% if section.settings.show_number_of_products_switcher %}
+		<label for="products-to-show">
+			<span class="label">{{ 'collections.collection.show' | t }}:</span>
+			<select name="show" id="products-to-show" class="raw" data-default="12">
+				<option value="12">{{ 'collections.show.12' | t }}</option>
+				<option value="24">{{ 'collections.show.24' | t }}</option>
+				<option value="48">{{ 'collections.show.48' | t }}</option>
+			</select>
+		</label>
+	{% endif %}
+
+	{% if section.settings.show_view_switcher %}
+		<label id="layout-switcher">
+			<span class="label">{{ 'collections.collection.view_as' | t }}:</span>
+			<a href="#" data-layout="grid" class="icon-grid active"></a>
+			<a href="#" data-layout="list" class="icon-list"></a>
+		</label>
+	{% endif %}
+
+</div>
+
+{% schema %}
+{
+	"name": "Filters toolbar",
+	"settings": [
+		{
+			"type": "checkbox",
+			"id": "show_sort_switcher",
+			"label": "Show the sort switcher",
+			"default": true
+		},
+		{
+			"type": "checkbox",
+			"id": "show_number_of_products_switcher",
+			"label": "Show the switcher to change the number of products",
+			"default": true
+		},
+		{
+			"type": "checkbox",
+			"id": "show_view_switcher",
+			"label": "Show the switcher to change the view (grid/list)",
+			"default": true
+		}
+	]
+}
+{% endschema %}
