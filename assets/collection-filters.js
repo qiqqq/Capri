@@ -9,9 +9,9 @@ jQuery.extend(window.Capri, {
       Capri.filters.initFiltersObject();
       Capri.filters.initEvents();
 
-      History.Adapter.bind(window, "statechange", function () {
+      window.onpopstate = history.onpushstate = function () {
         Capri.filters.getContentByAjax();
-      });
+      };
 
       jQuery(window).on("accordion-toggle", function (e, accordion) {
         var index = accordion.index();
@@ -93,11 +93,11 @@ jQuery.extend(window.Capri, {
             Shopify.queryParams.constraint = Capri.filters.joinFilters();
           }
 
-          History.pushState(
+          window.history.pushState(
             {
               param: Shopify.queryParams,
             },
-            document.title,
+            "",
             Capri.filters.createNewUrl()
           );
         });
@@ -115,11 +115,11 @@ jQuery.extend(window.Capri, {
             Shopify.queryParams.constraint = Capri.filters.joinFilters();
           }
 
-          History.pushState(
+          window.history.pushState(
             {
               param: Shopify.queryParams,
             },
-            document.title,
+            "",
             Capri.filters.createNewUrl()
           );
         });
@@ -145,11 +145,11 @@ jQuery.extend(window.Capri, {
           Shopify.queryParams.page = page;
         }
 
-        History.pushState(
+        window.history.pushState(
           {
             param: Shopify.queryParams,
           },
-          document.title,
+          "",
           Capri.filters.createNewUrl()
         );
       });
@@ -178,11 +178,11 @@ jQuery.extend(window.Capri, {
             Shopify.queryParams.view = currentVal;
           }
 
-          History.pushState(
+          window.history.pushState(
             {
               param: Shopify.queryParams,
             },
-            document.title,
+            "",
             Capri.filters.createNewUrl()
           );
         },
@@ -211,11 +211,11 @@ jQuery.extend(window.Capri, {
             Shopify.queryParams.sort_by = currentVal;
           }
 
-          History.pushState(
+          window.history.pushState(
             {
               param: Shopify.queryParams,
             },
-            document.title,
+            "",
             Capri.filters.createNewUrl()
           );
         },
@@ -243,11 +243,11 @@ jQuery.extend(window.Capri, {
           Shopify.queryParams.layout = layout;
         }
 
-        History.pushState(
+        window.history.pushState(
           {
             param: Shopify.queryParams,
           },
-          document.title,
+          "",
           Capri.filters.createNewUrl()
         );
       });
@@ -365,3 +365,13 @@ jQuery.extend(window.Capri, {
 jQuery(document).ready(function () {
   Capri.filters.init();
 });
+
+(function (history) {
+  var pushState = history.pushState;
+  history.pushState = function (state) {
+    if (typeof history.onpushstate == "function") {
+      history.onpushstate({ state: state });
+    }
+    return pushState.apply(history, arguments);
+  };
+})(window.history);

@@ -71,8 +71,6 @@
   	<!--[if lt IE 9]><script src="{{ 'theme.js' | asset_url }}"></script><![endif]-->
 
   	{% if template contains 'collection' %}
-	  	<!--[if (gt IE 9)|!(IE)]><!--><script src="{{ 'jquery.history.js' | asset_url }}" defer="defer"></script><!--<![endif]-->
-	  	<!--[if lt IE 9]><script src="{{ 'jquery.history.js' | asset_url }}"></script><![endif]-->
 	  	<!--[if (gt IE 9)|!(IE)]><!--><script src="{{ 'collection-filters.js' | asset_url }}" defer="defer"></script><!--<![endif]-->
 	  	<!--[if lt IE 9]><script src="{{ 'collection-filters.js' | asset_url }}"></script><![endif]-->
   	{% endif %}
