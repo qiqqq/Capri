@@ -4,31 +4,35 @@
  * A file that contains scripts highly couple code to the Gift Card template.
  */
 
-(function() {
+(function () {
   var config = {
-    qrCode: '#QrCode',
-    printButton: '#PrintGiftCard',
-    giftCardCode: '.giftcard__code'
+    qrCode: "#QrCode",
+    printButton: "#PrintGiftCard",
+    giftCardCode: ".giftcard__code",
   };
 
   var $qrCode = $(config.qrCode);
 
   new QRCode($qrCode[0], {
-    text: $qrCode.attr('data-identifier'),
+    text: $qrCode.attr("data-identifier"),
     width: 120,
-    height: 120
+    height: 120,
   });
 
-  jQuery(config.printButton).on('click', function() {
+  jQuery(config.printButton).on("click", function () {
     window.print();
   });
 
   // Auto-select gift card code on click, based on ID passed to the function
-  jQuery(config.giftCardCode).on('click', {element: 'GiftCardDigits'}, selectText);
+  jQuery(config.giftCardCode).on(
+    "click",
+    { element: "GiftCardDigits" },
+    selectText
+  );
 
   function selectText(evt) {
     var text = document.getElementById(evt.data.element);
-    var range = '';
+    var range = "";
 
     if (document.body.createTextRange) {
       range = document.body.createTextRange();
